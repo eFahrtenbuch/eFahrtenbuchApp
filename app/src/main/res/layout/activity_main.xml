@@ -35,18 +35,18 @@
         app:layout_constraintTop_toBottomOf="@+id/tfPasswort" />
 
     <Button
-        android:id="@+id/btAccErstellen"
+        android:id="@+id/btNeuAccErstellen"
         android:layout_width="370dp"
         android:layout_height="60dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="5dp"
         android:background="@android:drawable/bottom_bar"
         android:backgroundTint="#7A0000"
         android:fontFamily="@font/josefin_sans"
-        android:text="Neuen Account erstellen"
+        android:text="neuen account erstellen"
         android:textColor="#fff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btAnmelden" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
         android:id="@+id/textView"
@@ -69,8 +69,9 @@
         android:background="#fff"
         android:ems="10"
         android:fontFamily="@font/josefin_sans"
+        android:hint="Name"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:paddingLeft="20sp"
         android:textColor="#000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +88,7 @@
         android:fontFamily="@font/josefin_sans"
         android:hint="Passwort"
         android:inputType="textPassword"
-        android:text="Passwort"
+        android:paddingLeft="20sp"
         android:textColor="#000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +98,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/josefin_sans"
         android:text="Noch keinen Account ?"
         android:textColor="#fff"

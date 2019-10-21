@@ -1,6 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/background">
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:fontFamily="@font/pacifico"
+        android:text="Fahrtenbuch"
+        android:textColor="#fff"
+        android:textSize="50sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btAccountErstellen"
+        android:layout_width="370dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="70dp"
+        android:background="@android:drawable/bottom_bar"
+        android:backgroundTint="#7A0000"
+        android:fontFamily="@font/josefin_sans"
+        android:text="account erstellen"
+        android:textColor="#fff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tfPasswort2Register" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/josefin_sans"
+        android:text="Bitte geben Sie Ihren Namen und ein Wunschpasswort ein"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <EditText
+        android:id="@+id/tfNameRegister"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
+        android:layout_width="370dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="80dp"
+        android:background="#fff"
+        android:ems="10"
+        android:fontFamily="@font/josefin_sans"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:paddingLeft="20sp"
+        android:textColor="#000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/tfPasswortRegister"
+        style="@style/Widget.AppCompat.EditText"
+        android:layout_width="370dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="40dp"
+        android:background="#fff"
+        android:ems="10"
+        android:fontFamily="@font/josefin_sans"
+        android:hint="Passwort"
+        android:inputType="textPassword"
+        android:paddingLeft="20sp"
+        android:textColor="#000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tfNameRegister" />
+
+    <EditText
+        android:id="@+id/tfPasswort2Register"
+        style="@style/Widget.AppCompat.EditText"
+        android:layout_width="370dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:background="#fff"
+        android:ems="10"
+        android:fontFamily="@font/josefin_sans"
+        android:hint="Passwort"
+        android:inputType="textPassword"
+        android:paddingLeft="20sp"
+        android:textColor="#000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tfPasswortRegister" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
