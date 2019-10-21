@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btAnmelden"
         android:layout_width="370dp"
         android:layout_height="60dp"
         android:layout_marginTop="85dp"
@@ -32,10 +32,10 @@
         android:textColor="#fff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText3" />
+        app:layout_constraintTop_toBottomOf="@+id/tfPasswort" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btAccErstellen"
         android:layout_width="370dp"
         android:layout_height="60dp"
         android:layout_marginTop="40dp"
@@ -46,7 +46,7 @@
         android:textColor="#fff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/btAnmelden" />
 
     <TextView
         android:id="@+id/textView"
@@ -61,8 +61,8 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
-        android:id="@+id/editText"
-        style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+        android:id="@+id/tfName"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
         android:layout_width="370dp"
         android:layout_height="60dp"
         android:layout_marginTop="90dp"
@@ -77,8 +77,8 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/editText3"
-        style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+        android:id="@+id/tfPasswort"
+        style="@style/Widget.AppCompat.EditText"
         android:layout_width="370dp"
         android:layout_height="60dp"
         android:layout_marginTop="32dp"
@@ -91,7 +91,7 @@
         android:textColor="#000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/tfName" />
 
     <TextView
         android:id="@+id/textView3"
@@ -104,6 +104,6 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/btAnmelden" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
