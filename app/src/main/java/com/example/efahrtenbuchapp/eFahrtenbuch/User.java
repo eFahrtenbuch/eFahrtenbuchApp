@@ -1,12 +1,18 @@
 package com.example.efahrtenbuchapp.eFahrtenbuch;
 
-public class User implements Cloneable{
+import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
+
+import org.json.JSONObject;
+
+public class User implements Cloneable {
+
 	private int id;
-	//Max L�nge 64 Zeichen
+	//Max Länge 64 Zeichen
 	private String benutzername;
 	//Vor- und Nachname aus der DB max. L�nge 64 Zeichen
 	private String name;
 	private String vorname;
+
 	public User(int id, String benutzername, String name, String vorname) {
 		super();
 		this.id = id;
@@ -14,6 +20,11 @@ public class User implements Cloneable{
 		this.name = name;
 		this.vorname = vorname;
 	}
+
+	public User(){
+		//For JsonConverter
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -27,17 +38,18 @@ public class User implements Cloneable{
 		this.benutzername = benutzername;
 	}
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
 	public String getVorname() {
-		return vorname;
+		return this.vorname;
 	}
 	public void setVorname(String vorname) {
 		this.vorname = vorname;
 	}
+
 	/**
 	 * @return Prüft ob Nicht Null und eine gültige ID & Benutzername vorhanden sind.
 	 */
@@ -53,5 +65,9 @@ public class User implements Cloneable{
 	@Override
 	public User clone() {
 		return new User(this.id, this.benutzername, this.name, this.vorname);
+	}
+
+	public static User createFromJson(JSONObject json) {
+		return new JSONConverter<User>().createFromJSON(User.class, json);
 	}
 }

@@ -1,10 +1,17 @@
 package com.example.efahrtenbuchapp.eFahrtenbuch;
 
+import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
+
+import org.json.JSONObject;
+
 public class Auto {
 	private String kennzeichen;
 	private String modell;
 	private String passwort;
 	private int kmStand;
+
+	//For JSONConverter
+	public Auto(){ }
 	
 	public Auto(String kennzeichen, String modell, String passwort, int kmStand) {
 		super();
@@ -49,5 +56,9 @@ public class Auto {
 			return false;
 		}
 		return this.getKennzeichen().equals(((Auto)obj).getKennzeichen());
+	}
+
+	public static Auto createFromJSON(JSONObject json){
+		return new JSONConverter<Auto>().createFromJSON(Auto.class, json);
 	}
 }
