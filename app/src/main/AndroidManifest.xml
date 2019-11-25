@@ -18,6 +18,22 @@
 
             </intent-filter>
         </activity>
+        <activity android:name=".RegisterActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.ALTERNATIVE" />
+
+            </intent-filter>
+        </activity>
+        <activity android:name=".ListViewActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.ALTERNATIVE" />
+
+        </intent-filter>
+    </activity>
     </application>
 
     <!-- Berechtigungen-->

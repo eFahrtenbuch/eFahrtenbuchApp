@@ -59,6 +59,6 @@ public class Auto {
 	}
 
 	public static Auto createFromJSON(JSONObject json){
-		return new JSONConverter<Auto>().createFromJSON(Auto.class, json);
+		return JSONConverter.createObjectFromJSON(Auto.class, json);
 	}
 }

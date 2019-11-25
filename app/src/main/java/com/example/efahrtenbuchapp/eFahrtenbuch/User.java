@@ -68,6 +68,6 @@ public class User implements Cloneable {
 	}
 
 	public static User createFromJson(JSONObject json) {
-		return new JSONConverter<User>().createFromJSON(User.class, json);
+		return JSONConverter.createObjectFromJSON(User.class, json);
 	}
 }
