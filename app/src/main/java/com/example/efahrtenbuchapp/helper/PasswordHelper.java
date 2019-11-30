@@ -13,14 +13,9 @@ public class PasswordHelper {
 		return true;
 	}
 	
-	public static String getEncryptedPassword(String text)
+	public static String getEncryptedPassword(String text) throws NoSuchAlgorithmException
 	{
-		try {
-			return PasswordHelper.bytesToHex(PasswordHelper.encyrpt(text));
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return PasswordHelper.bytesToHex(PasswordHelper.encyrpt(text));
 	}
 	
 	/**
