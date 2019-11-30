@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="100">
+    android:background="#80FFFFFF"
+    android:orientation="horizontal"
+    android:weightSum="100"
+    android:layout_marginTop="2dp">
+
     <TextView
-        android:gravity="center"
-        android:textAlignment="center"
-        android:text="textview1"
+        android:id="@+id/tv1"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:id="@+id/tv1"
-        android:layout_weight="66.6"/>
+        android:layout_weight="66.6"
+        android:gravity="center"
+        android:text="textview1"
+        android:textAlignment="center" />
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="33.3">
+        android:layout_weight="33.3"
+        android:orientation="vertical">
 
         <TextView
-            android:gravity="center"
-            android:text="textview2"
+            android:id="@+id/tv2"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:id="@+id/tv2"/>
+            android:gravity="center"
+            android:text="textview2" />
 
         <TextView
-            android:gravity="center"
-            android:text="textview3"
+            android:id="@+id/tv3"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:id="@+id/tv3"/>
+            android:gravity="center"
+            android:text="textview3" />
 
     </LinearLayout>
 

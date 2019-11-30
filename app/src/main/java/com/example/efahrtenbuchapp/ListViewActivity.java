@@ -24,16 +24,16 @@ public class ListViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview);
         ListView lv = findViewById(R.id.listviewid);
-        SimpleRequest.simpleJsonRequest(this, "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
-            Log.d("onCreate: ", jsonResponse.toString());
+        SimpleRequest.simpleJsonArrayRequest(this, "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
+            Log.d("onCreate: ListActivity ", jsonResponse.toString());
             List<FahrtListAdapter> list = JSONConverter.toJSONList(jsonResponse).stream()//
-                    .map(json -> (Fahrt) JSONConverter.createObjectFromJSON(Fahrt.class, json))//
+                    .map(json -> (Fahrt) JSONConverter.createFahrtFromJSON(json))//
                     .map(fahrt -> new FahrtListAdapter(fahrt))
                     .collect(Collectors.toList());
             refreshList(list);
-        });
+        }, (error) -> message(error.toString()));
 
-        FahrtListenAdapter adapter = new FahrtListenAdapter(this, R.layout.listview, new ArrayList());
+        FahrtListenAdapter adapter = new FahrtListenAdapter(this, R.layout.fahrt_list_adapter, new ArrayList());
         lv.setAdapter(adapter);
     }
 
@@ -43,7 +43,7 @@ public class ListViewActivity extends AppCompatActivity {
 
     public void refreshList(List<FahrtListAdapter> list){
         ListView lv = findViewById(R.id.listviewid);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+        ArrayAdapter adapter = new FahrtListenAdapter(this, R.layout.listview, list);
         lv.setAdapter(adapter);
     }
 }

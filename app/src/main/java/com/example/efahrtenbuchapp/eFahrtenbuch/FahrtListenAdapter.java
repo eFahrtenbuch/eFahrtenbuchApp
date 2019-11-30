@@ -11,14 +11,13 @@ import androidx.annotation.NonNull;
 
 import com.example.efahrtenbuchapp.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FahrtListenAdapter extends ArrayAdapter<FahrtListAdapter> {
     private final int resource;
     private Context context;
 
-    public FahrtListenAdapter(@NonNull Context context, int resource, ArrayList<FahrtListAdapter> objects) {
+    public FahrtListenAdapter(@NonNull Context context, int resource, List<FahrtListAdapter> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -32,7 +31,7 @@ public class FahrtListenAdapter extends ArrayAdapter<FahrtListAdapter> {
         FahrtListAdapter fla = new FahrtListAdapter(datum, ziel, km);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        convertView = inflater.inflate(resource, parent, false);
+        convertView = inflater.inflate(R.layout.fahrt_list_adapter, parent, false);
         TextView tv1 = convertView.findViewById(R.id.tv1);
         TextView tv2 = convertView.findViewById(R.id.tv2);
         TextView tv3 = convertView.findViewById(R.id.tv3);

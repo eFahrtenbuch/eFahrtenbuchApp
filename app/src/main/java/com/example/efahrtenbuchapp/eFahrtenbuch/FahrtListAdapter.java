@@ -1,12 +1,14 @@
 package com.example.efahrtenbuchapp.eFahrtenbuch;
 
+import com.example.efahrtenbuchapp.utils.DateUtils;
+
 public class FahrtListAdapter {
     private String datum;
     private String ziel;
     private String km;
 
     public FahrtListAdapter(Fahrt fahrt){
-        this.datum = fahrt.getFahrtBeginnDatum().toString() + "/" + fahrt.getFahrtBeginnZeit();
+        this.datum = DateUtils.getDate(fahrt.getFahrtBeginnDatum()) + "/" + DateUtils.getTime(fahrt.getFahrtBeginnZeit());
         this.ziel = fahrt.getZielAdresse().getOrt();
         this.km = Double.toString(fahrt.getKmFahrtEnde() - fahrt.getKmFahrtBeginn());
     }
