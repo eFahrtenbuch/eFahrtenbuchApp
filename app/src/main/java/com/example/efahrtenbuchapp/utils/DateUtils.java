@@ -14,6 +14,17 @@ public class DateUtils {
 
 	/**
 	 * @return Aktuelles Datum als String im Format: TT.MM.YYYY (DOY)
+	 */
+	public static String getDate(java.util.Date date){
+		return date.getDay() + "." + (date.getMonth() + 1) + "." + date.getYear();
+	}
+
+	public static String getTime(java.util.Date time){
+		return time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+	}
+
+	/**
+	 * @return Aktuelles Datum als String im Format: TT.MM.YYYY (DOY)
 	 * (DOY = Day Of Year)
 	 */
 	public static String getDate(LocalDateTime ldt)

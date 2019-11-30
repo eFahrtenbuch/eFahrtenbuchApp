@@ -2,8 +2,6 @@ package com.example.efahrtenbuchapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DownloadManager;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,14 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.android.volley.Request;
-import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
-import com.example.efahrtenbuchapp.eFahrtenbuch.json.WebServiceRessources;
 import com.example.efahrtenbuchapp.helper.PasswordHelper;
-import com.example.efahrtenbuchapp.http.HttpRequester;
-import com.example.efahrtenbuchapp.http.UrlBuilder;
-
-import java.security.NoSuchAlgorithmException;
+import com.example.efahrtenbuchapp.http.SimpleRequest;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,34 +21,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d("MainActivity -> onCreate: ", "started");
         Button btAnmelden = findViewById(R.id.btAnmelden);
+
         btAnmelden.setOnClickListener(click -> {
             //TODO
-            String pw = null;
-            try {
-                pw = PasswordHelper.getEncryptedPassword(((TextView)findViewById(R.id.tfPasswort)).getText().toString());
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-
+            String pw = PasswordHelper.getEncryptedPassword(((TextView)findViewById(R.id.tfPasswort)).getText().toString());
             String username = ((TextView)findViewById(R.id.tfName)).getText().toString();
-            String url = new UrlBuilder("http://10.0.2.2:8080//")
-                            .path("loginUser")
-                            .param("username", username)
-                            .param( "hashedPasswort", pw)
-                            .build();
-            Log.d("MAIN ACTIVITY ON CREATE URL:", url);
-            ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "Verbinde...",
-                    "Einloggen...", true);
+            String url = "http://10.0.2.2:8080//loginUser?username=" + username + "&hashedPasswort=" + pw;
 
-            HttpRequester.simpleStringRequest(this, url,
-                    (String response) -> {
-                        login(response.equals("OK"));
-                        dialog.dismiss();
-                    },
-                    error -> {
-                        msg(error.networkResponse == null ? WebServiceRessources.ERROR_NO_CONN_LONG :  "Es ist ein Fehler aufgetreten!", true);
-                        dialog.dismiss();
-            });
+            SimpleRequest.simpleResponse(this, url, (String response) -> login(response.equals("OK")), error -> login(false));
         });
         ((Button)findViewById(R.id.btNeuAccErstellen)).setOnClickListener(onClick -> {
             Intent myIntent = new Intent(this, RegisterActivity.class);
@@ -64,20 +36,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ((TextView)findViewById(R.id.textView3)).setOnClickListener(onClick -> {
-           Intent myIntent = new Intent(this, ListViewActivity.class);
-            startActivity(myIntent);
-            HttpRequester.simpleJsonRequest(this, "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
+            SimpleRequest.simpleJsonArrayRequest(this, "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
                 Log.d("onCreate: ", jsonResponse.toString());
-                Toast.makeText(MainActivity.this, jsonResponse.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, jsonResponse.toString(), Toast.LENGTH_LONG).show();
+                Intent myIntent = new Intent(this, ListViewActivity.class);
+                startActivity(myIntent);
             }, error -> Log.d("ERROR LISTENER:", error.toString()));
-
         });
     }
     public void login(boolean success){
-        Toast toast = Toast.makeText(this, success ? "Erfolgreich eingeloggt" : "Fehlerhafter Login",Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this, success ? "Gute Login" : "Schlechte Login",Toast.LENGTH_LONG);
         toast.show();
-    }
-    public void msg(String msg, boolean timeLong){
-        Toast.makeText(this, msg, timeLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
     }
 }

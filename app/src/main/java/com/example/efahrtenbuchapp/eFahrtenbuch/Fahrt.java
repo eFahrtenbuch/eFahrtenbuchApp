@@ -5,6 +5,9 @@ import java.util.concurrent.TimeUnit;
 
 import com.example.efahrtenbuchapp.utils.DateUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /** Simples Business Objekt zur Repräsentation von einer Fahrt*/
 public class Fahrt implements Comparable<Fahrt>{
 	private int id;
