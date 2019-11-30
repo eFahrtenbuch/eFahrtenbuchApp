@@ -11,7 +11,9 @@ import android.widget.Toast;
 
 
 import com.example.efahrtenbuchapp.helper.PasswordHelper;
-import com.example.efahrtenbuchapp.http.SimpleRequest;
+import com.example.efahrtenbuchapp.http.HttpRequester;
+
+import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,11 +26,16 @@ public class MainActivity extends AppCompatActivity {
 
         btAnmelden.setOnClickListener(click -> {
             //TODO
-            String pw = PasswordHelper.getEncryptedPassword(((TextView)findViewById(R.id.tfPasswort)).getText().toString());
+            String pw = null;
+            try {
+                pw = PasswordHelper.getEncryptedPassword(((TextView)findViewById(R.id.tfPasswort)).getText().toString());
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
             String username = ((TextView)findViewById(R.id.tfName)).getText().toString();
             String url = "http://10.0.2.2:8080//loginUser?username=" + username + "&hashedPasswort=" + pw;
 
-            SimpleRequest.simpleResponse(this, url, (String response) -> login(response.equals("OK")), error -> login(false));
+            HttpRequester.simpleStringRequest(this, url, (String response) -> login(response.equals("OK")), error -> login(false));
         });
         ((Button)findViewById(R.id.btNeuAccErstellen)).setOnClickListener(onClick -> {
             Intent myIntent = new Intent(this, RegisterActivity.class);
@@ -36,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ((TextView)findViewById(R.id.textView3)).setOnClickListener(onClick -> {
-            SimpleRequest.simpleJsonArrayRequest(this, "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
+            HttpRequester.simpleJsonArrayRequest(this, "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
                 Log.d("onCreate: ", jsonResponse.toString());
                 Toast.makeText(MainActivity.this, jsonResponse.toString(), Toast.LENGTH_LONG).show();
                 Intent myIntent = new Intent(this, ListViewActivity.class);
