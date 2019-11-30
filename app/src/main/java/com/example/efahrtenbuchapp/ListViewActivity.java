@@ -8,11 +8,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
 import com.example.efahrtenbuchapp.eFahrtenbuch.FahrtListAdapter;
 import com.example.efahrtenbuchapp.eFahrtenbuch.FahrtListenAdapter;
 import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
-import com.example.efahrtenbuchapp.http.SimpleRequest;
+import com.example.efahrtenbuchapp.http.HttpRequester;
+import com.example.efahrtenbuchapp.http.UrlBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +26,17 @@ public class ListViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview);
         ListView lv = findViewById(R.id.listviewid);
-        SimpleRequest.simpleJsonRequest(this, "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
+        HttpRequester.simpleJsonArrayRequest(this, "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
             Log.d("onCreate: ", jsonResponse.toString());
             List<FahrtListAdapter> list = JSONConverter.toJSONList(jsonResponse).stream()//
-                    .map(json -> (Fahrt) JSONConverter.createObjectFromJSON(Fahrt.class, json))//
+                    .map(json -> {
+                        HttpRequester.simpleJsonRequest(this, Request.Method.POST, new UrlBuilder().path("insertFahrt").build(), json, null, null);
+                        return (Fahrt) JSONConverter.createObjectFromJSON(Fahrt.class, json);
+                    })//
                     .map(fahrt -> new FahrtListAdapter(fahrt))
                     .collect(Collectors.toList());
             refreshList(list);
-        });
+        }, null);
 
         FahrtListenAdapter adapter = new FahrtListenAdapter(this, R.layout.listview, new ArrayList());
         lv.setAdapter(adapter);
