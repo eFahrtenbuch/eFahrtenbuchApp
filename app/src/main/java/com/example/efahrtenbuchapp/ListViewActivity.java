@@ -16,6 +16,12 @@ import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
 import com.example.efahrtenbuchapp.http.HttpRequester;
 import com.example.efahrtenbuchapp.http.UrlBuilder;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +37,24 @@ public class ListViewActivity extends AppCompatActivity {
             List<FahrtListAdapter> list = JSONConverter.toJSONList(jsonResponse).stream()//
                     .map(json -> {
                         Log.d("SEND JSON IN REQUEST BODY: ", json.toString());
-                        HttpRequester.simpleJsonRequest(ListViewActivity.this, Request.Method.POST, "http://10.0.2.2:8080/insertFahrt", json, null, null);
+                        //HttpRequester.simpleJsonRequest(ListViewActivity.this, Request.Method.POST, "http://10.0.2.2:8080/insertFahrt", json, null, null);
+                        HttpClient httpClient = HttpClientBuilder.create().build(); //Use this instead
+
+                        try {
+
+                            HttpPost request = new HttpPost("http://10.0.2.2:8080/insertFahrt");
+                            StringEntity params =new StringEntity(json.toString());
+                            request.addHeader("content-type", "application/x-www-form-urlencoded");
+                            request.setEntity(params);
+                            HttpResponse response = httpClient.execute(request);
+
+                            //handle response here...
+
+                        }catch (Exception ex) {
+
+                            //handle exception here
+
+                        }
                         return (Fahrt) JSONConverter.createFahrtFromJSON(json);
                     })//
                     .map(fahrt -> new FahrtListAdapter(fahrt))
