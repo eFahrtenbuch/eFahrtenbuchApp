@@ -1,6 +1,8 @@
 package com.example.efahrtenbuchapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,11 +21,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
         Log.d("MainActivity -> onCreate: ", "started");
         Button btAnmelden = findViewById(R.id.btAnmelden);
 
         btAnmelden.setOnClickListener(click -> {
             //TODO
+            ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
+                    "Verbinde...", true);
             String pw = null;
             try {
                 pw = PasswordHelper.getEncryptedPassword(((TextView)findViewById(R.id.tfPasswort)).getText().toString());
@@ -52,5 +57,9 @@ public class MainActivity extends AppCompatActivity {
     public void login(boolean success){
         Toast toast = Toast.makeText(this, success ? "Gute Login" : "Schlechte Login",Toast.LENGTH_LONG);
         toast.show();
+        if(){
+            Intent myIntent = new Intent(this, MainActivity2.class);
+            startActivity(myIntent);
+        }
     }
 }

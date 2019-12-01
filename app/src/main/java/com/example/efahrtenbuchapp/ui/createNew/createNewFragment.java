@@ -1,10 +1,12 @@
 package com.example.efahrtenbuchapp.ui.createNew;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.location.Criteria;
 import android.location.Location;
@@ -101,11 +103,14 @@ public class createNewFragment extends Fragment {
                 Lon.set(location.getLongitude());
             }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
 
-            public void onProviderEnabled(String provider) {}
+            public void onProviderEnabled(String provider) {
+            }
 
-            public void onProviderDisabled(String provider) {}
+            public void onProviderDisabled(String provider) {
+            }
         };
 
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
@@ -200,7 +205,7 @@ public class createNewFragment extends Fragment {
                    }
                });
                    thread.start();
-
+                   thread.interrupt();
            }
 
        });
@@ -216,9 +221,7 @@ public class createNewFragment extends Fragment {
                     public void run() {
                         try  {
                             if (Lat.get() == null && Lon.get() == null){
-                                Toast ToastGPSSignal = Toast.makeText(getActivity(), "Lade GPS Signal ...", Toast.LENGTH_SHORT);
-                                ToastGPSSignal.show();
-
+                               Toast.makeText(getActivity(), "Lade GPS Signal ...", Toast.LENGTH_SHORT).show();
                             }
                             else {
                                 locationManager.requestLocationUpdates(locationManager.getBestProvider(new Criteria(),true),0, 0, locationListener);
@@ -229,8 +232,7 @@ public class createNewFragment extends Fragment {
                                 EndOrtText.setText(NewAddress.getCity());
                                 System.out.println(Lat.get());
                                 System.out.println(Lon.get());
-                                Toast ToastGPSErfolgreich = Toast.makeText(getActivity(), "Position wurde erfolgreich ermittelt", Toast.LENGTH_SHORT);
-                                ToastGPSErfolgreich.show();
+                                Toast.makeText(getActivity(), "Position wurde erfolgreich ermittelt", Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -238,7 +240,6 @@ public class createNewFragment extends Fragment {
                     }
                 });
                 thread.start();
-
             }
 
         });
