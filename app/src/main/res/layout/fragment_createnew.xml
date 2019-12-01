@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E1E1E1">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tvStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="START"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etEndDate"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="45dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Datum"
+                android:inputType="date"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etEndTime"
+                app:layout_constraintTop_toBottomOf="@+id/btGetStartAdress" />
+
+            <EditText
+                android:id="@+id/etStartStreet"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="3dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Straße"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toStartOf="@+id/etStartNr"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etStartTime" />
+
+            <Button
+                android:id="@+id/btGetEndAdress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="#AD0010"
+                android:text="Adresse erfassen"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etEndKm" />
+
+            <EditText
+                android:id="@+id/etEndTime"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="3dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Uhrzeit"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toStartOf="@+id/etEndDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btGetStartAdress" />
+
+            <EditText
+                android:id="@+id/etStartOrt"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="11dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Stadt"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etStartPLZ"
+                app:layout_constraintTop_toBottomOf="@+id/etStartNr" />
+
+            <EditText
+                android:id="@+id/etStartTime"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="3dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Uhrzeit"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toStartOf="@+id/etStartDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etEndPLZ"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginEnd="-1dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="PLZ"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toStartOf="@+id/etEndOrt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etEndStreet" />
+
+            <Button
+                android:id="@+id/btGetStartAdress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#AD0010"
+                android:text="Adresse erfassen"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etStartKm" />
+
+            <Button
+                android:id="@+id/btStartNav"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#AD0010"
+                android:text="Navigation Starten"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etArbeitsweg" />
+
+            <Button
+                android:id="@+id/btSubmit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#AD0010"
+                android:text="fahrt erstellen"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.487"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btStartNav" />
+
+            <EditText
+                android:id="@+id/etEndKm"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Kilometerstand"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etEndPLZ" />
+
+            <EditText
+                android:id="@+id/etZweck"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Zweck der Reise"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvStop2" />
+
+            <EditText
+                android:id="@+id/etLiterbetrag"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Literbetrag"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvStop3" />
+
+            <EditText
+                android:id="@+id/etSprittkosten"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Sprittkosten in €"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etLiterbetrag" />
+
+            <EditText
+                android:id="@+id/etVerbrauch"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Verbrauch (in l/100km)"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etSprittkosten" />
+
+            <EditText
+                android:id="@+id/etExtrasKosten"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Sonstige Kosten"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvStop4" />
+
+            <EditText
+                android:id="@+id/etPrivatGef"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Privat gefahrene KM"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etExtrasKosten" />
+
+            <EditText
+                android:id="@+id/etGeschaeftlichGef"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Geschäftlich gefahrene KM"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etPrivatGef" />
+
+            <EditText
+                android:id="@+id/etArbeitsweg"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Weg Wohnung - Arbeit"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etGeschaeftlichGef" />
+
+            <EditText
+                android:id="@+id/etRoute"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Route der Reise"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etZweck" />
+
+            <EditText
+                android:id="@+id/etZiel"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Besuchte Personen/Firmen/Behörden"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etRoute" />
+
+            <EditText
+                android:id="@+id/etEndOrt"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="12dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Stadt"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etEndPLZ"
+                app:layout_constraintTop_toBottomOf="@+id/etEndNr" />
+
+            <EditText
+                android:id="@+id/etStartNr"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Nummer"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etStartStreet"
+                app:layout_constraintTop_toBottomOf="@+id/etStartDate" />
+
+            <EditText
+                android:id="@+id/etEndNr"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="9dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Nummer"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etEndStreet"
+                app:layout_constraintTop_toBottomOf="@+id/etEndDate" />
+
+            <EditText
+                android:id="@+id/etStartKm"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="9dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Kilometerstand"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etStartOrt" />
+
+            <EditText
+                android:id="@+id/etStartDate"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="45dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Datum"
+                android:inputType="date"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/etStartTime"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etStartPLZ"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="11dp"
+                android:layout_marginEnd="3dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="PLZ"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toStartOf="@+id/etStartOrt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etStartStreet" />
+
+            <EditText
+                android:id="@+id/etEndStreet"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="3dp"
+                android:background="?attr/actionModeBackground"
+                android:ems="10"
+                android:hint="Straße"
+                android:inputType="textPersonName"
+                android:paddingLeft="25px"
+                app:layout_constraintEnd_toStartOf="@+id/etEndNr"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etEndDate" />
+
+            <TextView
+                android:id="@+id/tvStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="ZIEL"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btGetStartAdress" />
+
+            <TextView
+                android:id="@+id/tvStop2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="EXTRAS"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btGetEndAdress" />
+
+            <TextView
+                android:id="@+id/tvStop3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="KRAFTSTOFF"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etZiel" />
+
+            <TextView
+                android:id="@+id/tvStop4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="EXTRAS"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etVerbrauch" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

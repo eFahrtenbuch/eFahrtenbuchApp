@@ -16,12 +16,6 @@ import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
 import com.example.efahrtenbuchapp.http.HttpRequester;
 import com.example.efahrtenbuchapp.http.UrlBuilder;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

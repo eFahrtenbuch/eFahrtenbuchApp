@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">Fahrtenbuch1.0</string>
+    <string name="app_name">FahrenbuchFront</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Das Fahrtenbuch</string>
+    <string name="nav_header_subtitle"> </string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_createNew">Neue Fahrt</string>
+    <string name="menu_table">Tabellenansicht</string>
+    <string name="menu_mycars">Meine Autos</string>
+    <string name="menu_admin">Administration</string>
+    <string name="menu_changePW">Passwort Ändern</string>
+    <string name="menu_logout">Logout</string>
+    <string name="appName">Das Fahrtenbuch</string>
 </resources>
