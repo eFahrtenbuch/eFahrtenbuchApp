@@ -38,7 +38,10 @@ public class MainActivity extends AppCompatActivity {
             String username = ((TextView)findViewById(R.id.tfName)).getText().toString();
             String url = "http://10.0.2.2:8080//loginUser?username=" + username + "&hashedPasswort=" + pw;
 
-            HttpRequester.simpleStringRequest(this, url, (String response) -> login(response.equals("OK")), error -> login(false));
+            HttpRequester.simpleStringRequest(this, url, (String response) -> {
+                dialog.hide();
+                login(response.equals("OK"));
+                }, error -> login(false));
         });
         ((Button)findViewById(R.id.btNeuAccErstellen)).setOnClickListener(onClick -> {
             Intent myIntent = new Intent(this, RegisterActivity.class);

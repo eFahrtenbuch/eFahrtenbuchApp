@@ -32,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
             String hashedPasswort = null;
             try {
                 hashedPasswort = PasswordHelper.getEncryptedPassword(password1.getText().toString());
+                Log.d("", "onCreate: RegisterActivity: PW before hash: " + password1.getText().toString());
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
