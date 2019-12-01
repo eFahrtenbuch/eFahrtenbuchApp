@@ -205,7 +205,6 @@ public class createNewFragment extends Fragment {
                    }
                });
                    thread.start();
-                   thread.interrupt();
            }
 
        });

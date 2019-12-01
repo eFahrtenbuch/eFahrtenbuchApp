@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     public void login(boolean success){
         Toast toast = Toast.makeText(this, success ? "Gute Login" : "Schlechte Login",Toast.LENGTH_LONG);
         toast.show();
-        if(){
+        if(true){
             Intent myIntent = new Intent(this, MainActivity2.class);
             startActivity(myIntent);
         }
