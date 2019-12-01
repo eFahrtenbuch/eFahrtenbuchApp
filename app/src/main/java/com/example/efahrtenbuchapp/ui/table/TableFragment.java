@@ -13,22 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.android.volley.Request;
 import com.example.efahrtenbuchapp.R;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
 import com.example.efahrtenbuchapp.eFahrtenbuch.FahrtListAdapter;
 import com.example.efahrtenbuchapp.eFahrtenbuch.FahrtListenAdapter;
 import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
 import com.example.efahrtenbuchapp.http.HttpRequester;
+import com.example.efahrtenbuchapp.ui.createNew.CreateNewViewModel;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +41,6 @@ public class TableFragment extends Fragment {
                 textView.setText(s);
             }
         });*/
-        super.onCreate(savedInstanceState);
         getActivity().setContentView(R.layout.listview);
         ListView lv = root.findViewById(R.id.listviewid);
         HttpRequester.simpleJsonArrayRequest(getActivity(), "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
@@ -77,7 +68,7 @@ public class TableFragment extends Fragment {
 
     public void refreshList(View root, List<FahrtListAdapter> list){
         ListView lv = root.findViewById(R.id.listviewid);
-        ArrayAdapter adapter = new FahrtListenAdapter(getActivity(), R.layout.fahrt_list_adapter, list);
+        ArrayAdapter adapter = new FahrtListenAdapter(root.getContext(), R.layout.fahrt_list_adapter, list);
         lv.setAdapter(adapter);
     }
 }
