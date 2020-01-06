@@ -156,7 +156,7 @@
                 android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etArbeitsweg" />
+                app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
             <Button
                 android:id="@+id/btSubmit"
@@ -474,6 +474,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etVerbrauch" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etArbeitsweg" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
