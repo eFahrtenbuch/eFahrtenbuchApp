@@ -1,6 +1,11 @@
 package com.example.efahrtenbuchapp.eFahrtenbuch;
 
+import android.content.Context;
+
+import androidx.annotation.Nullable;
+
 import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
+import com.example.efahrtenbuchapp.http.HttpRequester;
 
 import org.json.JSONObject;
 

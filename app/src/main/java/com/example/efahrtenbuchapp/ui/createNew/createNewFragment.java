@@ -15,12 +15,17 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -29,8 +34,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.efahrtenbuchapp.R;
+import com.example.efahrtenbuchapp.eFahrtenbuch.Auto;
+import com.example.efahrtenbuchapp.eFahrtenbuch.UserManager;
+import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
+import com.example.efahrtenbuchapp.http.HttpRequester;
+import com.example.efahrtenbuchapp.http.UrlBuilder;
 
+import org.json.JSONObject;
+
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class createNewFragment extends Fragment {
 
@@ -124,12 +138,7 @@ public class createNewFragment extends Fragment {
         }, rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), true);
 
         final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        StartDateText.setText(day + "." + month + "." + year);
-                    }
-                }, rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH), rightNow.get(Calendar.DAY_OF_MONTH));
+                (datePicker, year, month, day) -> StartDateText.setText(day + "." + month + "." + year), rightNow.get(Calendar.YEAR), rightNow.get(Calendar.MONTH), rightNow.get(Calendar.DAY_OF_MONTH));
 
        StartTimeText.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -172,100 +181,90 @@ public class createNewFragment extends Fragment {
             }
         });
 
-       GetAddressButton.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
+       GetAddressButton.setOnClickListener(v -> {
 
 
-               Thread thread = new Thread(new Runnable() {
+           Thread thread = new Thread(() -> {
+               try  {
+                   if (Lat.get() == null && Lon.get() == null){
+                       Toast ToastGPSSignal = Toast.makeText(getActivity(), "Lade GPS Signal ...", Toast.LENGTH_SHORT);
+                       ToastGPSSignal.show();
 
-                   @Override
-                   public void run() {
-                       try  {
-                           if (Lat.get() == null && Lon.get() == null){
-                               Toast ToastGPSSignal = Toast.makeText(getActivity(), "Lade GPS Signal ...", Toast.LENGTH_SHORT);
-                               ToastGPSSignal.show();
-
-                           }
-                           else {
-                               locationManager.requestLocationUpdates(locationManager.getBestProvider(new Criteria(),true),0, 0, locationListener);
-                               Coordinates NewAddress = new Coordinates(Lat.get(), Lon.get());
-                               StartStreetText.setText(NewAddress.getStreet());
-                               StartNumberText.setText(String.valueOf(NewAddress.getNumber()));
-                               StartPLZText.setText(NewAddress.getCode());
-                               StartOrtText.setText(NewAddress.getCity());
-                               System.out.println(Lat.get());
-                               System.out.println(Lon.get());
-                               Toast ToastGPSErfolgreich = Toast.makeText(getActivity(), "Position wurde erfolgreich ermittelt", Toast.LENGTH_SHORT);
-                               ToastGPSErfolgreich.show();
-                           }
-                       } catch (Exception e) {
-                           e.printStackTrace();
-                       }
                    }
-               });
-                   thread.start();
-           }
-
+                   else {
+                       locationManager.requestLocationUpdates(locationManager.getBestProvider(new Criteria(),true),0, 0, locationListener);
+                       Coordinates NewAddress = new Coordinates(Lat.get(), Lon.get());
+                       StartStreetText.setText(NewAddress.getStreet());
+                       StartNumberText.setText(String.valueOf(NewAddress.getNumber()));
+                       StartPLZText.setText(NewAddress.getCode());
+                       StartOrtText.setText(NewAddress.getCity());
+                       System.out.println(Lat.get());
+                       System.out.println(Lon.get());
+                       Toast ToastGPSErfolgreich = Toast.makeText(getActivity(), "Position wurde erfolgreich ermittelt", Toast.LENGTH_SHORT);
+                       ToastGPSErfolgreich.show();
+                   }
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+           });
+               thread.start();
        });
 
-        GetEndAddressButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                Thread thread = new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try  {
-                            if (Lat.get() == null && Lon.get() == null){
-                               Toast.makeText(getActivity(), "Lade GPS Signal ...", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                locationManager.requestLocationUpdates(locationManager.getBestProvider(new Criteria(),true),0, 0, locationListener);
-                                Coordinates NewAddress = new Coordinates(Lat.get(), Lon.get());
-                                EndStreetText.setText(NewAddress.getStreet());
-                                EndNumberText.setText(String.valueOf(NewAddress.getNumber()));
-                                EndPLZText.setText(NewAddress.getCode());
-                                EndOrtText.setText(NewAddress.getCity());
-                                System.out.println(Lat.get());
-                                System.out.println(Lon.get());
-                                Toast.makeText(getActivity(), "Position wurde erfolgreich ermittelt", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+        GetEndAddressButton.setOnClickListener(v -> {
+            Thread thread = new Thread(() -> {
+                try  {
+                    if (Lat.get() == null && Lon.get() == null){
+                       Toast.makeText(getActivity(), "Lade GPS Signal ...", Toast.LENGTH_SHORT).show();
                     }
-                });
-                thread.start();
-            }
-
+                    else {
+                        locationManager.requestLocationUpdates(locationManager.getBestProvider(new Criteria(),true),0, 0, locationListener);
+                        Coordinates NewAddress = new Coordinates(Lat.get(), Lon.get());
+                        EndStreetText.setText(NewAddress.getStreet());
+                        EndNumberText.setText(String.valueOf(NewAddress.getNumber()));
+                        EndPLZText.setText(NewAddress.getCode());
+                        EndOrtText.setText(NewAddress.getCity());
+                        System.out.println(Lat.get());
+                        System.out.println(Lon.get());
+                        Toast.makeText(getActivity(), "Position wurde erfolgreich ermittelt", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
         });
 
-        StartNavButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        StartNavButton.setOnClickListener(v -> {
 
-                String TargetAddress = EndStreetText.getText() + " " + EndNumberText.getText() + " " + EndPLZText.getText() + " " + EndOrtText.getText();
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + TargetAddress);
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
-                try
-                {
-                    startActivity(mapIntent);
-                }
-                catch(ActivityNotFoundException ex)
-                {
-
-                }
-
-
-            }
+            String TargetAddress = EndStreetText.getText() + " " + EndNumberText.getText() + " " + EndPLZText.getText() + " " + EndOrtText.getText();
+            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + TargetAddress);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            startActivity(mapIntent);
+            try { startActivity(mapIntent); }
+            catch(ActivityNotFoundException ex) {/**/}
         });
-
-       return root;
+       Spinner spinner = root.findViewById(R.id.spinner);
+       List<String> kennzeichenListe = null;
+        int userid =  UserManager.getInstance().getUser().getId();
+        Log.d("onCreateView - createNewFragment:" , userid + "");
+        String url = new UrlBuilder().path("getUserAutos").param("userid", Integer.toString(userid)).build();
+        HttpRequester.simpleJsonArrayRequest(root.getContext(), url, jsonArrayResponse -> {
+            List<JSONObject> jsonObjects = JSONConverter.toJSONList(jsonArrayResponse);
+            List<String> autoListe = jsonObjects.stream()//
+                .map(jsonObject -> JSONConverter.createObjectFromJSON(Auto.class, jsonObject))
+                .map(auto -> auto.getKennzeichen())
+                .collect(Collectors.toList());
+            Log.d("TAG", "context of adapter = " + getContext());
+            Toast.makeText(getContext(), getContext() + "", Toast.LENGTH_LONG);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, autoListe);
+            spinner.setAdapter(adapter);
+        }, error -> {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, new String[]{"Fehler!"});
+            spinner.setAdapter(adapter);
+            Log.d("createNewFragment", "onCreateView: error while loading kennzeichen");
+        });
+        return root;
     }
 
 }

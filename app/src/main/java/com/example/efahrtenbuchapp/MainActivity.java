@@ -10,8 +10,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.example.efahrtenbuchapp.eFahrtenbuch.User;
+import com.example.efahrtenbuchapp.eFahrtenbuch.UserManager;
+import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
 import com.example.efahrtenbuchapp.helper.PasswordHelper;
 import com.example.efahrtenbuchapp.http.HttpRequester;
+import com.example.efahrtenbuchapp.http.UrlBuilder;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -36,12 +41,18 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             String username = ((TextView)findViewById(R.id.tfName)).getText().toString();
+            String urlWithBuilder = new UrlBuilder().path("loginUser").param(username, username).param("hashedPasswort", pw).build();
             String url = "http://10.0.2.2:8080//loginUser?username=" + username + "&hashedPasswort=" + pw;
 
             HttpRequester.simpleStringRequest(this, url, (String response) -> {
                 dialog.hide();
-                login(response.equals("OK"));
-                }, error -> login(false));
+                HttpRequester.simpleJsonRequest(this, new UrlBuilder().path("getUserbyUserName").param("username", username).build(),
+                        jsonResponse -> {
+                            Log.d("MainActivity -> onLogin: ", "jsonUserResponse = " + jsonResponse);
+                            login(response.equals("OK"), JSONConverter.createObjectFromJSON(User.class, jsonResponse));
+                        },
+                        this::failedLogin);
+                }, this::failedLogin);
         });
         ((Button)findViewById(R.id.btNeuAccErstellen)).setOnClickListener(onClick -> {
             Intent myIntent = new Intent(this, RegisterActivity.class);
@@ -57,12 +68,19 @@ public class MainActivity extends AppCompatActivity {
             }, error -> Log.d("ERROR LISTENER:", error.toString()));
         });
     }
-    public void login(boolean success){
-        Toast toast = Toast.makeText(this, success ? "Gute Login" : "Schlechte Login",Toast.LENGTH_LONG);
-        toast.show();
-        if(true){
+    public void login(boolean success, User user){
+        Toast.makeText(this, success ? "Login erfolgreich" : "Login fehlgeschlagen!",Toast.LENGTH_LONG).show();
+
+        if(success && user != null || true){
             Intent myIntent = new Intent(this, MainActivity2.class);
             startActivity(myIntent);
+            UserManager.getInstance().setUser(user);
+            Log.d("LOGIN SUCCESFULL WITH USER = ", user.toString());
+            this.finish();
         }
+    }
+    public void failedLogin(VolleyError error){
+        error.printStackTrace();
+        login(false, null);
     }
 }

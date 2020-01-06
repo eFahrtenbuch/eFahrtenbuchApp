@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class UrlBuilder {
     private HashMap<String, String> valuesMap;
     private String url = WebServiceRessources.BASE_URL;
+    private String protocol = WebServiceRessources.PROTOCOL;
     private String path ;
 
 
@@ -35,7 +36,7 @@ public class UrlBuilder {
         return this;
     }
     public String build(){
-        StringBuilder sb = new StringBuilder(this.url + path + "?");
+        StringBuilder sb = new StringBuilder(protocol + url + path + "?");
         valuesMap.entrySet().stream().map(entry -> "&" + entry.getKey() + "=" + entry.getValue()).forEach(sb::append);
         return sb.toString();
     }
