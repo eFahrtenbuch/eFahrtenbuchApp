@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.efahrtenbuchapp.eFahrtenbuch.json.WebServiceRessources;
+import com.example.efahrtenbuchapp.http.json.WebServiceRessources;
 import com.example.efahrtenbuchapp.helper.PasswordHelper;
 import com.example.efahrtenbuchapp.http.HttpRequester;
 

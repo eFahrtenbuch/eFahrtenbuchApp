@@ -11,20 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.example.efahrtenbuchapp.eFahrtenbuch.FahrtListAdapter;
 import com.example.efahrtenbuchapp.eFahrtenbuch.FahrtListenAdapter;
-import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
+import com.example.efahrtenbuchapp.http.json.JSONConverter;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
 import com.example.efahrtenbuchapp.http.HttpRequester;
-import com.example.efahrtenbuchapp.http.UrlBuilder;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

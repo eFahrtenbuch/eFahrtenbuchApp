@@ -1,6 +1,6 @@
 package com.example.efahrtenbuchapp.http;
 
-import com.example.efahrtenbuchapp.eFahrtenbuch.json.WebServiceRessources;
+import com.example.efahrtenbuchapp.http.json.WebServiceRessources;
 
 import java.util.HashMap;
 

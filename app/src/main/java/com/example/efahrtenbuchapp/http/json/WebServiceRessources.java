@@ -1,6 +1,4 @@
-package com.example.efahrtenbuchapp.eFahrtenbuch.json;
-
-import com.android.volley.Response;
+package com.example.efahrtenbuchapp.http.json;
 
 public class WebServiceRessources {
     public static final String BASE_URL = "10.0.2.2:8080/";

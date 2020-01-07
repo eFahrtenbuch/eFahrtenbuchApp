@@ -17,9 +17,8 @@ import com.example.efahrtenbuchapp.R;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
 import com.example.efahrtenbuchapp.eFahrtenbuch.FahrtListAdapter;
 import com.example.efahrtenbuchapp.eFahrtenbuch.FahrtListenAdapter;
-import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
+import com.example.efahrtenbuchapp.http.json.JSONConverter;
 import com.example.efahrtenbuchapp.http.HttpRequester;
-import com.example.efahrtenbuchapp.ui.createNew.CreateNewViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

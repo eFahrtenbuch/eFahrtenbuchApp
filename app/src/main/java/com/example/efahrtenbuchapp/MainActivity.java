@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.example.efahrtenbuchapp.eFahrtenbuch.User;
 import com.example.efahrtenbuchapp.eFahrtenbuch.UserManager;
-import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
+import com.example.efahrtenbuchapp.http.json.JSONConverter;
 import com.example.efahrtenbuchapp.helper.PasswordHelper;
 import com.example.efahrtenbuchapp.http.HttpRequester;
 import com.example.efahrtenbuchapp.http.UrlBuilder;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             Intent myIntent = new Intent(this, MainActivity2.class);
             startActivity(myIntent);
             UserManager.getInstance().setUser(user);
-            Log.d("LOGIN SUCCESFULL WITH USER = ", user.toString());
+            //KANN WEGLog.d("LOGIN SUCCESFULL WITH USER = ", user.toString());
             this.finish();
         }
     }

@@ -1,6 +1,6 @@
 package com.example.efahrtenbuchapp.eFahrtenbuch;
 
-import com.example.efahrtenbuchapp.eFahrtenbuch.json.JSONConverter;
+import com.example.efahrtenbuchapp.http.json.JSONConverter;
 
 import org.json.JSONObject;
 

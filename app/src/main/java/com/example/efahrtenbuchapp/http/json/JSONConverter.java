@@ -1,4 +1,4 @@
-package com.example.efahrtenbuchapp.eFahrtenbuch.json;
+package com.example.efahrtenbuchapp.http.json;
 
 import android.util.Log;
 
@@ -21,61 +21,6 @@ public class JSONConverter {
 
     private JSONConverter(){}
 
-    private static<T> HashMap<String, Object> getFieldNamesAsMap(Class<T> clazz, JSONObject json, String... excludedFields) {
-       List<String> fieldNames =  Arrays.asList(clazz.getDeclaredFields()).stream().map(Field::getName).collect(Collectors.toList());
-       if(excludedFields != null){
-           Arrays.stream(excludedFields).forEach(fieldNames::remove);
-       }
-        HashMap<String, Object> hm = new HashMap<>();
-       for(String fieldName : fieldNames){
-           try {
-               hm.put(fieldName, json.get(fieldName));
-           } catch (JSONException e) {
-               e.printStackTrace();
-               System.out.println("Attribut " + fieldName + "in Klasse: " + clazz.getName() + " wurde nicht gefunden");
-           }
-       }
-       return hm;
-    }
-
-    private static<T> HashMap<String, Object> getFieldNamesAsMap(Class<T> clazz, JSONObject json) {
-        return  getFieldNamesAsMap(clazz, json, null);
-    }
-
-    private static <T> T mapToObject(Class<T> clazz, HashMap<String, Object> hm){
-        T obj = null;
-        try {
-            obj = clazz.newInstance();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            System.out.println("Fehler bei der Initialisierung von : '" + clazz.getName() + "' (Kein Zugriff)");
-            return null;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            System.out.println("Fehler bei der Initialisierung von : '" + clazz.getName() + "' (InstantiationException)");
-            return null;
-        }
-        for(Map.Entry<String, Object> entry : hm.entrySet())
-        {
-            try {
-                Field field = clazz.getDeclaredField((entry.getKey()));
-                if(!field.isAccessible()) {
-                    field.setAccessible(true);
-                }
-                field.set(obj, entry.getValue());
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                System.out.println("Fehler beim setzen von : '" + clazz.getName()+"."+ entry.getValue() + "'  (Kein Zugriff)");
-                return null;
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-                System.out.println("Fehler beim setzen von : '" + clazz.getName()+"."+ entry.getValue() + "'  (Kein Zugriff)");
-                return null;
-            }
-        }
-        return obj;
-    }
-
     /**
      * Creates a Object from the type of clazz and fills the fields with the data from the given json
      * @param clazz the type of the Object that is created
@@ -83,7 +28,7 @@ public class JSONConverter {
      * @return
      */
     public static <T> T createObjectFromJSON(Class<T> clazz, JSONObject json){
-        HashMap<String, Object> fieldNamesMap = getFieldNamesAsMap(clazz, json);
+        HashMap<String, Object> fieldNamesMap = getFieldNamesAsMap(clazz, json, null);
         return mapToObject(clazz, fieldNamesMap);
     }
 
@@ -103,6 +48,17 @@ public class JSONConverter {
             }
         }
         return jsonList;
+    }
+
+    /**
+     * Erstellt aus einem jsonArray die entsprechenden Objekte in einer Liste
+     * @param clazz Klasse der zu erstellenden Objekte
+     * @param jsonArray aus dem werden die Objekte erzeugt
+     * @param <T> Typ der zu erzeugenden Objekte
+     * @return eine Liste aller Objekte die von dem jsonArray repräsentiert werden
+     */
+    public static <T> List<T> mapToObjectList(Class<T> clazz, JSONArray jsonArray){
+        return toJSONList(jsonArray).stream().map(json -> createObjectFromJSON(clazz, json)).collect(Collectors.toList());
     }
 
     public static Fahrt createFahrtFromJSON(JSONObject json){
@@ -145,4 +101,55 @@ public class JSONConverter {
         }
     }
 
+    private static<T> HashMap<String, Object> getFieldNamesAsMap(Class<T> clazz, JSONObject json, String... excludedFields) {
+       List<String> fieldNames =  Arrays.asList(clazz.getDeclaredFields()).stream().map(Field::getName).collect(Collectors.toList());
+       if(excludedFields != null){
+           Arrays.stream(excludedFields).forEach(fieldNames::remove);
+       }
+        HashMap<String, Object> hm = new HashMap<>();
+       for(String fieldName : fieldNames){
+           try {
+               hm.put(fieldName, json.get(fieldName));
+           } catch (JSONException e) {
+               e.printStackTrace();
+               System.out.println("Attribut " + fieldName + "in Klasse: " + clazz.getName() + " wurde nicht gefunden");
+           }
+       }
+       return hm;
+    }
+
+    private static <T> T mapToObject(Class<T> clazz, HashMap<String, Object> hm){
+        T obj = null;
+        try {
+            obj = clazz.newInstance();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            System.out.println("Fehler bei der Initialisierung von : '" + clazz.getName() + "' (Kein Zugriff)");
+            return null;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            System.out.println("Fehler bei der Initialisierung von : '" + clazz.getName() + "' (InstantiationException)");
+            return null;
+        }
+        for(Map.Entry<String, Object> entry : hm.entrySet())
+        {
+            try {
+                Field field = clazz.getDeclaredField((entry.getKey()));
+                if(!field.isAccessible()) {
+                    field.setAccessible(true);
+                }
+                field.set(obj, entry.getValue());
+            } catch (IllegalAccessException e) {
+                //Sollte eig. nicht vorkommen, da alle Felder vorher auf Accessible gesetzt werden.
+                e.printStackTrace();
+                System.out.println("Fehler beim setzen von : '" + clazz.getName()+"."+ entry.getValue() + "'  (Kein Zugriff)");
+                return null;
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+                System.out.println("Fehler beim setzen von : '" + clazz.getName()+"."+ entry.getValue() + "'  (Kein Zugriff)");
+                return null;
+            }
+        }
+        return obj;
+    }
 }

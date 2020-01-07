@@ -1,5 +1,12 @@
 package com.example.efahrtenbuchapp.eFahrtenbuch;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.Response;
+import com.example.efahrtenbuchapp.http.HttpRequester;
+import com.example.efahrtenbuchapp.http.UrlBuilder;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -77,5 +84,16 @@ public class Adresse {
 		return "Adresse [ID: " + id + " Straße:" + strasse +
 				" HausNr: " + hausnummer + " Ort: " + ort +
 				" PLZ: " + plz + " Zusatz" + zusatz + "]";
+	}
+
+	public void speichere(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener){
+		String url = new UrlBuilder().path("insertAdresseifNotAvailable")
+				.param("strasse", strasse)
+				.param("hausnr", hausnummer)
+				.param("ort", ort)
+				.param("PLZ", Integer.toString(plz))
+				.param("zusatz", zusatz).build();
+		Log.d("Adresse: ", "speichere: URL = " + url);
+		HttpRequester.simpleStringRequest(context, url, listener, errorListener);
 	}
 }
