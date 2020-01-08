@@ -30,4 +30,13 @@ public class FahrtListAdapter {
     public String getKm() {
         return km;
     }
+
+    @Override
+    public String toString() {
+        return "FahrtListAdapter{" +
+                "datum='" + datum + '\'' +
+                ", ziel='" + ziel + '\'' +
+                ", km='" + km + '\'' +
+                '}';
+    }
 }

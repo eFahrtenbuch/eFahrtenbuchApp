@@ -153,63 +153,7 @@ public class createNewFragment extends Fragment {
         EndDateText.setOnClickListener(click -> datePickerDialogEnd.show());
 
        StartNavButton.setOnClickListener(click -> openGoogleMapsNavigation(EndStreetText, EndNumberText, EndPLZText, EndOrtText));
-
-       sendButton.setOnClickListener(click -> {
-           String startDate = StartDateText.getText().toString();
-           String endDate = EndDateText.getText().toString();
-           Adresse startAdresse = new Adresse(StartStreetText.getText().toString(), StartNumberText.getText().toString(), StartOrtText.getText().toString(), Integer.parseInt(StartPLZText.getText().toString()), "");
-           Adresse endAdresse = new Adresse(EndStreetText.getText().toString(), EndNumberText.getText().toString(), EndOrtText.getText().toString(), Integer.parseInt(EndPLZText.getText().toString()), "");
-
-           AtomicReference<Integer> startAdresseID = new AtomicReference();
-           AtomicReference<Integer> endAdresseID = new AtomicReference();
-           startAdresse.speichere(getActivity(), responseStartAdresse -> {
-               startAdresseID.set(Integer.valueOf(Integer.parseInt(responseStartAdresse)));
-               Log.d("", "startAdresseID =  " + startAdresseID.get().intValue());
-                endAdresse.speichere(getActivity(), responseEndAdresse -> {
-                    try{
-                        startAdresseID.set(Integer.valueOf(Integer.parseInt(responseStartAdresse)));
-                        endAdresseID.set(Integer.valueOf(Integer.parseInt(responseEndAdresse)));
-                        Log.d("", "startAdresseID =  " + startAdresseID.get().intValue());
-                        Log.d("", "endAdresseID =  " + endAdresseID.get().intValue());
-                        if(startAdresseID.get().intValue() >= 0 && endAdresseID.get().intValue() >= 0){
-                            showLongToast("ERFOLGREICH DIIIIIGGA");
-                            EditText reiseRoute = root.findViewById(R.id.etRoute);
-                            EditText reiseZweck = root.findViewById(R.id.etZweck);
-                            EditText besuchtePersonenFirmenBehoerden = root.findViewById(R.id.etZiel);
-                            EditText kmFahrtBeginn = root.findViewById(R.id.etStartKm);
-                            EditText kmFahrtEnde = root.findViewById(R.id.etEndKm);
-                            EditText kmGeschaeftlich = root.findViewById(R.id.etGeschaeftlichGef);
-                            EditText kmPrivat = root.findViewById(R.id.etPrivatGef);
-                            EditText kmWohnArbeit = root.findViewById(R.id.etArbeitsweg);
-                            EditText kraftstoffLiter = root.findViewById(R.id.etLiterbetrag);
-                            EditText kraftstoffBetrag = root.findViewById(R.id.etSprittkosten);
-                            EditText literPro100km = root.findViewById(R.id.etVerbrauch);
-                            EditText sonstigesBetrag = root.findViewById(R.id.etExtrasKosten);
-
-                            Fahrt fahrt = new Fahrt(-1, parseDate(startDate), parseDate(endDate), parseTimeAndDate(startDate,  string(StartTimeText)),
-                                    parseTimeAndDate(endDate, string(EndTimeText)), startAdresseID.get().intValue(), endAdresseID.get().intValue(),
-                                    string(reiseZweck), string(reiseRoute), string(besuchtePersonenFirmenBehoerden), asDouble(kmFahrtBeginn), asDouble(kmFahrtEnde),
-                                    asDouble(kmGeschaeftlich), asDouble(kmPrivat), asDouble(kmWohnArbeit), asDouble(kraftstoffLiter), asDouble(kraftstoffBetrag),
-                                    asDouble(literPro100km), asDouble(sonstigesBetrag), "", UserManager.getInstance().getUser().getBenutzername(),
-                                    false, spinner.getSelectedItem().toString());
-                            Log.d("FAHR TO JSON", fahrt.toJSONObject().toString());
-                            HttpRequester.simpleJsonRequest(getActivity(), Request.Method.POST, new UrlBuilder().path("insertFahrt").build(), fahrt.toJSONObject(),
-                                    listener -> showLongToast("HAT GEKLAPPT MIT DER FAHRT"), errorListener -> showLongToast("HAT NICHT GEKLAPPT MIT DER FAHRT"));
-                    /*public Fahrt(int id, Date fahrtBeginnDatum, Date fahrtEndeDatum, Date fahrtBeginnZeit, Date fahrtEndeZeit, int adresseStartId,
-			int adresseZielId, String reisezweck, String reiseroute, String beuchtePersonenFirmenBehoerden, double kmFahrtBeginn, double kmFahrtEnde,
-			double kmGeschaeftlich, double kmPrivat, double kmWohnArbeit, double kraftstoffLiter, double kraftstoffBetrag,
-			double literPro100km, double sonstigesBetrag, String sonstigesBezeichnung, String fahrerName, boolean edited, String kennzeichen) {*/
-                        }
-                        else{
-                            showLongToast(FEHLERTEXT + "(1)");
-                        }
-                    }
-                    catch (NumberFormatException e){
-                        showLongToast(FEHLERTEXT + "(2)");
-                    }
-                }, error -> showLongToast(FEHLERTEXT + "(3)"));
-           }, error -> showLongToast(FEHLERTEXT + "(4)"));
-       });
+       sendButton.setOnClickListener(click -> speichereFahrt(root, StartTimeText, StartDateText, EndTimeText, EndDateText, spinner));
 
 
         int userid =  UserManager.getInstance().getUser().getId();
@@ -224,6 +168,60 @@ public class createNewFragment extends Fragment {
         return root;
     }
 
+    private void speichereFahrt(View root, EditText startTimeText, EditText startDateText, EditText endTimeText, EditText endDateText, Spinner spinner) {
+        String startDate = startDateText.getText().toString();
+        String endDate = endDateText.getText().toString();
+        Adresse startAdresse = new Adresse(string(StartStreetText), string(StartNumberText), string(StartOrtText), Integer.parseInt(string(StartPLZText)), "");
+        Adresse endAdresse = new Adresse(string(EndStreetText), string(EndNumberText), string(EndOrtText), Integer.parseInt(string(EndPLZText)), "");
+
+        AtomicReference<Integer> startAdresseID = new AtomicReference();
+        AtomicReference<Integer> endAdresseID = new AtomicReference();
+        startAdresse.speichere(getActivity(), responseStartAdresse -> {
+            startAdresseID.set(Integer.valueOf(Integer.parseInt(responseStartAdresse)));
+             endAdresse.speichere(getActivity(), responseEndAdresse -> {
+                 try{
+                     startAdresseID.set(Integer.valueOf(Integer.parseInt(responseStartAdresse)));
+                     endAdresseID.set(Integer.valueOf(Integer.parseInt(responseEndAdresse)));
+                     if(startAdresseID.get().intValue() >= 0 && endAdresseID.get().intValue() >= 0){
+                         Fahrt fahrt = createFahrtFromGui(root, startTimeText, endTimeText, spinner, startDate, endDate, startAdresseID, endAdresseID);
+
+                         HttpRequester.simpleJsonRequest(getActivity(), Request.Method.POST, new UrlBuilder().path("insertFahrt").build(), fahrt.toJSONObject(),
+                                 listener -> showLongToast("Fahrt wurde erfolgreich gespeichert"),
+                                 errorListener -> showLongToast("Fehler beim Speichern der Fahrt!"));
+                     }
+                     else{
+                         showLongToast(FEHLERTEXT + "(1)");
+                     }
+                 }
+                 catch (NumberFormatException e){
+                     showLongToast(FEHLERTEXT + "(2)");
+                 }
+             }, error -> showLongToast(FEHLERTEXT + "(3)"));
+        }, error -> showLongToast(FEHLERTEXT + "(4)"));
+    }
+
+    private Fahrt createFahrtFromGui(View root, EditText startTimeText, EditText endTimeText, Spinner spinner, String startDate, String endDate, AtomicReference<Integer> startAdresseID, AtomicReference<Integer> endAdresseID) {
+        EditText reiseRoute = root.findViewById(R.id.etRoute);
+        EditText reiseZweck = root.findViewById(R.id.etZweck);
+        EditText besuchtePersonenFirmenBehoerden = root.findViewById(R.id.etZiel);
+        EditText kmFahrtBeginn = root.findViewById(R.id.etStartKm);
+        EditText kmFahrtEnde = root.findViewById(R.id.etEndKm);
+        EditText kmGeschaeftlich = root.findViewById(R.id.etGeschaeftlichGef);
+        EditText kmPrivat = root.findViewById(R.id.etPrivatGef);
+        EditText kmWohnArbeit = root.findViewById(R.id.etArbeitsweg);
+        EditText kraftstoffLiter = root.findViewById(R.id.etLiterbetrag);
+        EditText kraftstoffBetrag = root.findViewById(R.id.etSprittkosten);
+        EditText literPro100km = root.findViewById(R.id.etVerbrauch);
+        EditText sonstigesBetrag = root.findViewById(R.id.etExtrasKosten);
+
+        return new Fahrt(-1, parseDate(startDate), parseDate(endDate), parseTimeAndDate(startDate,  string(startTimeText)),
+                parseTimeAndDate(endDate, string(endTimeText)), startAdresseID.get().intValue(), endAdresseID.get().intValue(),
+                string(reiseZweck), string(reiseRoute), string(besuchtePersonenFirmenBehoerden), asDouble(kmFahrtBeginn), asDouble(kmFahrtEnde),
+                asDouble(kmGeschaeftlich), asDouble(kmPrivat), asDouble(kmWohnArbeit), asDouble(kraftstoffLiter), asDouble(kraftstoffBetrag),
+                asDouble(literPro100km), asDouble(sonstigesBetrag), "", UserManager.getInstance().getUser().getBenutzername(),
+                false, spinner.getSelectedItem().toString());
+    }
+
     /**
      * Setzt die OnClickListener auf die Adresse-Erfassen-Buttons
      * Die Warnung wird hier Suppressed da die Permissions Abfrage an anderer Stelle stattfindet
@@ -236,7 +234,6 @@ public class createNewFragment extends Fragment {
     }
 
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] ergebnis) {
-        createNoGpsPermissionBenachrichtigung();
         if (requestCode == 1) {
             if (ergebnis.length > 0 && ergebnis[0] == PackageManager.PERMISSION_GRANTED) {
                 setAdresseErfassenListener();

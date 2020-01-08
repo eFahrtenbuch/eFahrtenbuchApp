@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="2dp"
     android:background="#80FFFFFF"
     android:orientation="horizontal"
     android:weightSum="100"
-    android:layout_marginTop="2dp">
+    android:descendantFocusability = "blocksDescendants"
+    android:focusable="false">
 
     <TextView
         android:id="@+id/tv1"
@@ -14,27 +16,35 @@
         android:layout_weight="66.6"
         android:gravity="center"
         android:text="textview1"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:focusable="false"
+        android:descendantFocusability = "blocksDescendants"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="33.3"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:focusable="false"
+        android:descendantFocusability = "blocksDescendants">
 
         <TextView
             android:id="@+id/tv2"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:gravity="center"
-            android:text="textview2" />
+            android:text="textview2"
+            android:focusable="false"
+            android:descendantFocusability = "blocksDescendants" />
 
         <TextView
             android:id="@+id/tv3"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:gravity="center"
-            android:text="textview3" />
+            android:text="textview3"
+            android:focusable="false"
+            android:descendantFocusability = "blocksDescendants" />
 
     </LinearLayout>
 

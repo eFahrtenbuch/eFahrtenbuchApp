@@ -149,6 +149,36 @@ public class Fahrt implements Comparable<Fahrt>{
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "Fahrt{" +
+				"id=" + id +
+				", fahrtBeginnDatum=" + fahrtBeginnDatum +
+				", fahrtBeginnZeit=" + fahrtBeginnZeit +
+				", fahrtEndeDatum=" + fahrtEndeDatum +
+				", fahrtEndeZeit=" + fahrtEndeZeit +
+				", adresseStartId=" + adresseStartId +
+				", startAdresse=" + startAdresse +
+				", adresseZielId=" + adresseZielId +
+				", zielAdresse=" + zielAdresse +
+				", reisezweck='" + reisezweck + '\'' +
+				", reiseroute='" + reiseroute + '\'' +
+				", besuchtePersonenFirmenBehoerden='" + besuchtePersonenFirmenBehoerden + '\'' +
+				", kmFahrtBeginn=" + kmFahrtBeginn +
+				", kmFahrtEnde=" + kmFahrtEnde +
+				", kmGeschaeftlich=" + kmGeschaeftlich +
+				", kmPrivat=" + kmPrivat +
+				", kmWohnArbeit=" + kmWohnArbeit +
+				", kraftstoffLiter=" + kraftstoffLiter +
+				", kraftstoffBetrag=" + kraftstoffBetrag +
+				", literPro100km=" + literPro100km +
+				", sonstigesBetrag=" + sonstigesBetrag +
+				", sonstigesBeschreibung='" + sonstigesBeschreibung + '\'' +
+				", fahrerName='" + fahrerName + '\'' +
+				", edited=" + edited +
+				", kennzeichen='" + kennzeichen + '\'' +
+				'}';
+	}
 	/*************************** Nur noch Getter/Setter ***************************/
 	public int getAdresseStartId() {
 		return adresseStartId;

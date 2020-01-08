@@ -32,6 +32,7 @@ public class FahrtListenAdapter extends ArrayAdapter<FahrtListAdapter> {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(R.layout.fahrt_list_adapter, parent, false);
+
         TextView tv1 = convertView.findViewById(R.id.tv1);
         TextView tv2 = convertView.findViewById(R.id.tv2);
         TextView tv3 = convertView.findViewById(R.id.tv3);
