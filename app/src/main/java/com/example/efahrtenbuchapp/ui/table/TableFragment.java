@@ -36,7 +36,6 @@ public class TableFragment extends Fragment {
 
         getActivity().setContentView(R.layout.fragment_table);
         ListView lv = root.findViewById(R.id.listviewidfrag);
-        lv.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
 
 

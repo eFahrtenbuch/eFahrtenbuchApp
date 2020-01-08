@@ -20,7 +20,7 @@ public class DateUtils {
 	}
 
 	public static String getTime(java.util.Date time){
-		return time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+		return String.format("%02d:%02d:%02d",time.getHours(), time.getMinutes(), time.getSeconds());
 	}
 
 	/**

@@ -3,20 +3,16 @@ package com.example.efahrtenbuchapp.eFahrtenbuch;
 import com.example.efahrtenbuchapp.utils.DateUtils;
 
 public class FahrtListAdapter {
+    private int id;
     private String datum;
     private String ziel;
     private String km;
 
     public FahrtListAdapter(Fahrt fahrt){
+        this.id = fahrt.getId();
         this.datum = DateUtils.getDate(fahrt.getFahrtBeginnDatum()) + "/" + DateUtils.getTime(fahrt.getFahrtBeginnZeit());
         this.ziel = fahrt.getZielAdresse().getOrt();
         this.km = Double.toString(fahrt.getKmFahrtEnde() - fahrt.getKmFahrtBeginn());
-    }
-
-    public FahrtListAdapter(String datum, String ziel, String km) {
-        this.datum = datum;
-        this.ziel = ziel;
-        this.km = km;
     }
 
     public String getDatum() {
@@ -31,12 +27,10 @@ public class FahrtListAdapter {
         return km;
     }
 
+    public int getId(){ return id; }
+
     @Override
     public String toString() {
-        return "FahrtListAdapter{" +
-                "datum='" + datum + '\'' +
-                ", ziel='" + ziel + '\'' +
-                ", km='" + km + '\'' +
-                '}';
+        return "FahrtListAdapter{" + "datum='" + datum + '\'' + ", ziel='" + ziel + '\'' + ", km='" + km + '\'' +'}';
     }
 }
