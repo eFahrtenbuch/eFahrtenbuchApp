@@ -1,5 +1,6 @@
 package com.example.efahrtenbuchapp.ui.logout;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.efahrtenbuchapp.R;
+import com.example.efahrtenbuchapp.eFahrtenbuch.UserManager;
 
 public class LogoutFragment extends Fragment {
 
@@ -28,6 +30,9 @@ public class LogoutFragment extends Fragment {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
+                UserManager.getInstance().setUser(null);
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(1);
             }
         });
         return root;

@@ -1,5 +1,8 @@
 package com.example.efahrtenbuchapp;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -16,11 +19,15 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity2 extends AppCompatActivity {
 
+
+    public final static String BENACHRICHTIGUNG_CHANNEL_ID = "1";
+
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createNotificationChannel();
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,14 +48,19 @@ public class MainActivity2 extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         return true;
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
+
+    private void createNotificationChannel() {
+        NotificationChannel channel = new NotificationChannel(BENACHRICHTIGUNG_CHANNEL_ID, "name", NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("description");
+        getSystemService(NotificationManager.class).createNotificationChannel(channel);
+    }
+
 }

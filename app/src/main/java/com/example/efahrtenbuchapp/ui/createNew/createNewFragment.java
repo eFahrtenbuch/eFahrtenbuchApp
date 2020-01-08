@@ -1,10 +1,14 @@
 package com.example.efahrtenbuchapp.ui.createNew;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.location.Criteria;
 import android.location.Location;
@@ -13,6 +17,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +29,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.android.volley.Request;
+import com.example.efahrtenbuchapp.MainActivity2;
 import com.example.efahrtenbuchapp.R;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Adresse;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Auto;
+import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
+import com.example.efahrtenbuchapp.eFahrtenbuch.UserManager;
 import com.example.efahrtenbuchapp.http.json.JSONConverter;
 import com.example.efahrtenbuchapp.gps.LocationChangedListener;
 import com.example.efahrtenbuchapp.http.HttpRequester;
 import com.example.efahrtenbuchapp.http.UrlBuilder;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -42,41 +59,61 @@ import java.util.stream.Collectors;
 
 public class createNewFragment extends Fragment {
 
-    final static String FEHLERTEXT = "Fehler beim Speichern der Start-Adresse";
+    final static String FEHLERTEXT = "Fehler beim Speichern der Adresse!";
 
-    @SuppressLint("MissingPermission")
+    private final AtomicReference<Double> Lat = new AtomicReference();
+    private final AtomicReference<Double> Lon = new AtomicReference();
+    private final LocationChangedListener locationListener =  location -> setKoordinaten(Lat, Lon, location);
+    private LocationManager locationManager;
+
+    /*Textfelder*/
+    //Start-Adresse
+    private EditText StartStreetText;
+    private EditText StartNumberText;
+    private EditText StartPLZText;
+    private EditText StartOrtText;
+    //End-Adresse
+    private EditText EndStreetText;
+    private EditText EndNumberText;
+    private EditText EndPLZText;
+    private EditText EndOrtText;
+    /*Buttons*/
+    private Button EndAddressButton;
+    private Button AddressButton;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        LocationManager locationManager;
+
         CreateNewViewModel createNewViewModel = ViewModelProviders.of(this).get(CreateNewViewModel.class);
 
-        final AtomicReference<Double> Lat = new AtomicReference();
-        final AtomicReference<Double> Lon = new AtomicReference();
 
         View root = inflater.inflate(R.layout.fragment_createnew, container, false);
 
         //Start Adresse - Textfelder
         EditText StartTimeText = root.findViewById(R.id.etStartTime);
         EditText StartDateText = root.findViewById(R.id.etStartDate);
-        EditText StartStreetText = root.findViewById(R.id.etStartStreet);
-        EditText StartNumberText = root.findViewById(R.id.etStartNr);
-        EditText StartPLZText = root.findViewById(R.id.etStartPLZ);
-        EditText StartOrtText = root.findViewById(R.id.etStartOrt);
+        StartStreetText = root.findViewById(R.id.etStartStreet);
+        StartNumberText = root.findViewById(R.id.etStartNr);
+        StartPLZText = root.findViewById(R.id.etStartPLZ);
+        StartOrtText = root.findViewById(R.id.etStartOrt);
 
         //Ziel Adresse - Textfelder
         EditText EndTimeText = root.findViewById(R.id.etEndTime);
         EditText EndDateText = root.findViewById(R.id.etEndDate);
-        EditText EndStreetText = root.findViewById(R.id.etEndStreet);
-        EditText EndNumberText = root.findViewById(R.id.etEndNr);
-        EditText EndPLZText = root.findViewById(R.id.etEndPLZ);
-        EditText EndOrtText = root.findViewById(R.id.etEndOrt);
+        EndStreetText = root.findViewById(R.id.etEndStreet);
+        EndNumberText = root.findViewById(R.id.etEndNr);
+        EndPLZText = root.findViewById(R.id.etEndPLZ);
+        EndOrtText = root.findViewById(R.id.etEndOrt);
 
         //Buttons
-        Button EndAddressButton = root.findViewById(R.id.btGetEndAdress);
-        Button AddressButton = root.findViewById(R.id.btGetStartAdress);
+        AddressButton = root.findViewById(R.id.btGetStartAdress);
+        EndAddressButton = root.findViewById(R.id.btGetEndAdress);
         Button StartNavButton = root.findViewById(R.id.btStartNav);
         Button sendButton = root.findViewById(R.id.btSubmit);
         Calendar rightNow = Calendar.getInstance();
+
+        //Spinner
+        Spinner spinner = root.findViewById(R.id.spinner);
 
         //Start-/Endzeit setzen
         StartTimeText.setText(formatTimeAsString(rightNow));
@@ -90,11 +127,18 @@ public class createNewFragment extends Fragment {
         EndTimeText.setInputType(InputType.TYPE_NULL);
         EndDateText.setInputType(InputType.TYPE_NULL);
 
+
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        LocationChangedListener locationListener =  location -> setKoordinaten(Lat, Lon, location);
 
         //TODO: PERMISSIONS CHECK
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //Berechtigung vorhanden
+            setAdresseErfassenListener();
+        }else{
+            //Berechtigung nicht vorhanden
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
+
 
         //Erstellen der Time- und Datepicker Dialoge
         final TimePickerDialog timePickerDialogEnd = createTimepickerDialog(rightNow, EndTimeText);
@@ -108,8 +152,6 @@ public class createNewFragment extends Fragment {
         EndTimeText.setOnClickListener(click -> timePickerDialogEnd.show());
         EndDateText.setOnClickListener(click -> datePickerDialogEnd.show());
 
-       AddressButton.setOnClickListener(click -> createGpsThread(locationManager, Lat, Lon, StartStreetText, StartNumberText, StartPLZText, StartOrtText, locationListener, root.getContext()).start());
-       EndAddressButton.setOnClickListener(click -> createGpsThread(locationManager, Lat, Lon, EndStreetText, EndNumberText, EndPLZText, EndOrtText, locationListener, requireContext()).start());
        StartNavButton.setOnClickListener(click -> openGoogleMapsNavigation(EndStreetText, EndNumberText, EndPLZText, EndOrtText));
 
        sendButton.setOnClickListener(click -> {
@@ -121,14 +163,38 @@ public class createNewFragment extends Fragment {
            AtomicReference<Integer> startAdresseID = new AtomicReference();
            AtomicReference<Integer> endAdresseID = new AtomicReference();
            startAdresse.speichere(getActivity(), responseStartAdresse -> {
+               startAdresseID.set(Integer.valueOf(Integer.parseInt(responseStartAdresse)));
+               Log.d("", "startAdresseID =  " + startAdresseID.get().intValue());
                 endAdresse.speichere(getActivity(), responseEndAdresse -> {
                     try{
-                        startAdresseID.set(Integer.parseInt(responseStartAdresse));
-                        endAdresseID.set(Integer.parseInt(responseEndAdresse));
+                        startAdresseID.set(Integer.valueOf(Integer.parseInt(responseStartAdresse)));
+                        endAdresseID.set(Integer.valueOf(Integer.parseInt(responseEndAdresse)));
+                        Log.d("", "startAdresseID =  " + startAdresseID.get().intValue());
+                        Log.d("", "endAdresseID =  " + endAdresseID.get().intValue());
                         if(startAdresseID.get().intValue() >= 0 && endAdresseID.get().intValue() >= 0){
                             showLongToast("ERFOLGREICH DIIIIIGGA");
-                                       /* Fahrt fahrt = new Fahrt(-1, Date.valueOf(startDate), Date.valueOf(endDate), java.util.Date.parse(startDate + StartTimeText.getText().toString()),
-                   java.util.Date.parse(startDate + EndTimeText.getText().toString()), );
+                            EditText reiseRoute = root.findViewById(R.id.etRoute);
+                            EditText reiseZweck = root.findViewById(R.id.etZweck);
+                            EditText besuchtePersonenFirmenBehoerden = root.findViewById(R.id.etZiel);
+                            EditText kmFahrtBeginn = root.findViewById(R.id.etStartKm);
+                            EditText kmFahrtEnde = root.findViewById(R.id.etEndKm);
+                            EditText kmGeschaeftlich = root.findViewById(R.id.etGeschaeftlichGef);
+                            EditText kmPrivat = root.findViewById(R.id.etPrivatGef);
+                            EditText kmWohnArbeit = root.findViewById(R.id.etArbeitsweg);
+                            EditText kraftstoffLiter = root.findViewById(R.id.etLiterbetrag);
+                            EditText kraftstoffBetrag = root.findViewById(R.id.etSprittkosten);
+                            EditText literPro100km = root.findViewById(R.id.etVerbrauch);
+                            EditText sonstigesBetrag = root.findViewById(R.id.etExtrasKosten);
+
+                            Fahrt fahrt = new Fahrt(-1, parseDate(startDate), parseDate(endDate), parseTimeAndDate(startDate,  string(StartTimeText)),
+                                    parseTimeAndDate(endDate, string(EndTimeText)), startAdresseID.get().intValue(), endAdresseID.get().intValue(),
+                                    string(reiseZweck), string(reiseRoute), string(besuchtePersonenFirmenBehoerden), asDouble(kmFahrtBeginn), asDouble(kmFahrtEnde),
+                                    asDouble(kmGeschaeftlich), asDouble(kmPrivat), asDouble(kmWohnArbeit), asDouble(kraftstoffLiter), asDouble(kraftstoffBetrag),
+                                    asDouble(literPro100km), asDouble(sonstigesBetrag), "", UserManager.getInstance().getUser().getBenutzername(),
+                                    false, spinner.getSelectedItem().toString());
+                            Log.d("FAHR TO JSON", fahrt.toJSONObject().toString());
+                            HttpRequester.simpleJsonRequest(getActivity(), Request.Method.POST, new UrlBuilder().path("insertFahrt").build(), fahrt.toJSONObject(),
+                                    listener -> showLongToast("HAT GEKLAPPT MIT DER FAHRT"), errorListener -> showLongToast("HAT NICHT GEKLAPPT MIT DER FAHRT"));
                     /*public Fahrt(int id, Date fahrtBeginnDatum, Date fahrtEndeDatum, Date fahrtBeginnZeit, Date fahrtEndeZeit, int adresseStartId,
 			int adresseZielId, String reisezweck, String reiseroute, String beuchtePersonenFirmenBehoerden, double kmFahrtBeginn, double kmFahrtEnde,
 			double kmGeschaeftlich, double kmPrivat, double kmWohnArbeit, double kraftstoffLiter, double kraftstoffBetrag,
@@ -145,8 +211,8 @@ public class createNewFragment extends Fragment {
            }, error -> showLongToast(FEHLERTEXT + "(4)"));
        });
 
-       Spinner spinner = root.findViewById(R.id.spinner);
-        int userid =  -1;//UserManager.getInstance().getUser().getId();
+
+        int userid =  UserManager.getInstance().getUser().getId();
         String url = new UrlBuilder().path("getUserAutos").param("userid", Integer.toString(userid)).build();
         HttpRequester.simpleJsonArrayRequest(root.getContext(), url, jsonArrayResponse -> {
             List<Auto> autos = JSONConverter.mapToObjectList(Auto.class, jsonArrayResponse);
@@ -156,6 +222,29 @@ public class createNewFragment extends Fragment {
             Toast.makeText(getActivity(), "Fehler beim Laden der Autos!", Toast.LENGTH_LONG).show();
         });
         return root;
+    }
+
+    /**
+     * Setzt die OnClickListener auf die Adresse-Erfassen-Buttons
+     * Die Warnung wird hier Suppressed da die Permissions Abfrage an anderer Stelle stattfindet
+     */
+    @SuppressLint("MissingPermission")
+    private void setAdresseErfassenListener() {
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        AddressButton.setOnClickListener(click -> createGpsThread(locationManager, Lat, Lon, StartStreetText, StartNumberText, StartPLZText, StartOrtText, locationListener, requireContext()).start());
+        EndAddressButton.setOnClickListener(click -> createGpsThread(locationManager, Lat, Lon, EndStreetText, EndNumberText, EndPLZText, EndOrtText, locationListener, requireContext()).start());
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] ergebnis) {
+        createNoGpsPermissionBenachrichtigung();
+        if (requestCode == 1) {
+            if (ergebnis.length > 0 && ergebnis[0] == PackageManager.PERMISSION_GRANTED) {
+                setAdresseErfassenListener();
+            } else {
+                createNoGpsPermissionBenachrichtigung();
+            }
+        }
+        showLongToast("requestCode " + requestCode);
     }
 
     private void openGoogleMapsNavigation(EditText endStreetText, EditText endNumberText, EditText endPLZText, EditText endOrtText) {
@@ -214,15 +303,6 @@ public class createNewFragment extends Fragment {
     }
 
     /**
-     * Gibt das volle Datum im Format DD.MM.YYYY aus
-     * @param cal
-     * @return das Datum als String
-     */
-    private String getFullDateAsString(Calendar cal){
-        return getDay(cal) + "." + getMonth(cal) + "." + getYear(cal);
-    }
-
-    /**
      * Gibt die Zeit zurück im Format HH:MM
      * @param cal
      * @return die Zeit als String
@@ -254,6 +334,42 @@ public class createNewFragment extends Fragment {
     }
 
     private void showLongToast(String text){
-        Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
+        getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show());
+    }
+
+    private void createNoGpsPermissionBenachrichtigung(){
+        PendingIntent pi = PendingIntent.getActivity(getActivity(), 0, new Intent(getActivity(), MainActivity2.class), PendingIntent.FLAG_ONE_SHOT);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity(), MainActivity2.BENACHRICHTIGUNG_CHANNEL_ID)
+                .setSmallIcon(R.drawable.error)
+                .setContentTitle("eFahrtenbuch")
+                .setContentText(getString(R.string.notificationNoLocationPermission))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.notificationNoLocationPermission)))
+                .setAutoCancel(true)
+                .setContentIntent(pi);
+        ((NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, mBuilder.build());
+    }
+    private static String string(EditText textfeld){
+        return textfeld.getText().toString();
+    }
+    private static double asDouble(EditText textfeld){
+       return Double.parseDouble(string(textfeld));
+    }
+    private static java.util.Date parseDate(String s){
+        try {
+            return new SimpleDateFormat("dd.MM.yyyy").parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private static java.util.Date parseTimeAndDate(String date, String time){
+        LocalTime localTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+        int hour = localTime.get(ChronoField.CLOCK_HOUR_OF_DAY);
+        int minute = localTime.get(ChronoField.MINUTE_OF_HOUR);
+        java.util.Date Date = parseDate(date);
+        Date.setHours(hour);
+        Date.setMinutes(minute);
+        return Date;
     }
 }

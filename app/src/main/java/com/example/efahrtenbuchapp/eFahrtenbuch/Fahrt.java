@@ -42,7 +42,7 @@ public class Fahrt implements Comparable<Fahrt>{
 	public Fahrt() {
 	}
 	// full arg konstruktor
-
+	//'Fahrt(int, java.util.Date, java.util.Date, java.util.Date, java.util.Date, int, int, java.lang.String, java.lang.String, java.lang.String, double, double, double, double, java.lang.String, java.lang.String, boolean, java.lang.String)'
 	public Fahrt(int id, Date fahrtBeginnDatum, Date fahrtEndeDatum, Date fahrtBeginnZeit, Date fahrtEndeZeit, int adresseStartId, 
 			int adresseZielId, String reisezweck, String reiseroute, String beuchtePersonenFirmenBehoerden, double kmFahrtBeginn, double kmFahrtEnde,
 			double kmGeschaeftlich, double kmPrivat, double kmWohnArbeit, double kraftstoffLiter, double kraftstoffBetrag, 
@@ -98,35 +98,62 @@ public class Fahrt implements Comparable<Fahrt>{
 	@SuppressWarnings("deprecation")
 	private String fahrzeitString(Date datum)
 	{
-		int minuten = datum.getMinutes();
-		int stunden = datum.getHours();
-		return String.format("%02d:%02d", stunden, minuten);
+		return String.format("%02d:%02d", datum.getMinutes(), datum.getHours());
 	}
-	
+
+	public boolean isInDateRange(Date from, Date to)
+	{
+		return fahrtBeginnDatum.equals(from) || fahrtBeginnDatum.equals(to) || (fahrtBeginnDatum.before(to) && fahrtBeginnDatum.after(from));
+	}
+
+	public boolean isInIdRange(int from, int to)
+	{
+		return this.id >= from && this.id <= to;
+	}
+
+	public boolean isFahrerOrEmpty(String fahrer)
+	{
+		return this.fahrerName.equals(fahrer) || fahrer.equals("") || fahrer.equals("null");
+	}
+
+	public JSONObject toJSONObject(){
+		JSONObject json = new JSONObject();
+		try {
+			json.put("id", id);
+			json.put("fahrtBeginnDatum", fahrtBeginnDatum);
+			json.put("fahrtEndeDatum" , fahrtEndeDatum);
+			json.put("fahrtBeginnZeit" , fahrtBeginnZeit);
+			json.put("fahrtEndeZeit" , fahrtEndeZeit);
+			json.put("reisezweck" , reisezweck);
+			json.put("reiseroute" , reiseroute);
+			json.put("besuchtePersonenFirmenBehoerden" , besuchtePersonenFirmenBehoerden);
+			json.put("kmFahrtBeginn" , kmFahrtBeginn);
+			json.put("kmFahrtEnde" , kmFahrtEnde);
+			json.put("kmGeschaeftlich" , kmGeschaeftlich);
+			json.put("kmPrivat" , kmPrivat);
+			json.put("kmWohnArbeit" , kmWohnArbeit);
+			json.put("kraftstoffLiter" , kraftstoffLiter);
+			json.put("kraftstoffBetrag" , kraftstoffBetrag);
+			json.put("literPro100km" , literPro100km);
+			json.put("sonstigesBetrag" , sonstigesBetrag);
+			json.put("sonstigesBeschreibung" , sonstigesBeschreibung);
+			json.put("adresseStartId" , adresseStartId);
+			json.put("fahrerName" , fahrerName);
+			json.put("adresseZielId" , adresseZielId);
+			json.put("edited" , edited);
+			json.put("kennzeichen" , kennzeichen);
+			return json;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	/*************************** Nur noch Getter/Setter ***************************/
 	public int getAdresseStartId() {
 		return adresseStartId;
 	}
 
-	public boolean isInDateRange(Date from, Date to)
-	{
-		if(fahrtBeginnDatum.equals(from) || fahrtBeginnDatum.equals(to) || (fahrtBeginnDatum.before(to) && fahrtBeginnDatum.after(from)))
-		{
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean isInIdRange(int from, int to)
-	{
-		if(this.id >= from && this.id <= to) {return true;}
-		return false;
-	}
-	public boolean isFahrerOrEmpty(String fahrer)
-	{
-		if(this.fahrerName.equals(fahrer) || fahrer.equals("") || fahrer.equals("null")) {return true;}
-		return false;
-	}
 	public int getAdresseZielId() {
 		return adresseZielId;
 	}

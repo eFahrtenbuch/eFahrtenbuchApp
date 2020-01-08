@@ -1,4 +1,4 @@
-package com.example.efahrtenbuchapp.http.json;
+package com.example.efahrtenbuchapp.http;
 
 public class WebServiceRessources {
     public static final String BASE_URL = "10.0.2.2:8080/";

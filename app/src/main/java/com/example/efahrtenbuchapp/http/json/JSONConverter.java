@@ -22,9 +22,9 @@ public class JSONConverter {
     private JSONConverter(){}
 
     /**
-     * Creates a Object from the type of clazz and fills the fields with the data from the given json
-     * @param clazz the type of the Object that is created
-     * @param json data for the fields (the categories need to be named exactly
+     * Erstellt ein Objekt vom Typ clazz und füllt die Attribute mit den Werten aus dem JSONObject
+     * @param clazz der Typ des zu erzeugenden Objektes
+     * @param json Daten für die Attribute
      * @return
      */
     public static <T> T createObjectFromJSON(Class<T> clazz, JSONObject json){
