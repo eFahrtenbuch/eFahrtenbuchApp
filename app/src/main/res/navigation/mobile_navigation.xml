@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_createnew" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/table"
         android:name="com.example.efahrtenbuchapp.ui.table.TableFragment"
         android:label="Das Fahrtenbuch"
         tools:layout="@layout/fragment_table" />
@@ -36,7 +36,7 @@
         tools:layout="@layout/fragment_changepw" />
 
     <fragment
-        android:id="@+id/nav_send"
+        android:id="@+id/logout"
         android:name="com.example.efahrtenbuchapp.ui.logout.LogoutFragment"
         android:label="Das Fahrtenbuch"
         tools:layout="@layout/fragment_logout" />

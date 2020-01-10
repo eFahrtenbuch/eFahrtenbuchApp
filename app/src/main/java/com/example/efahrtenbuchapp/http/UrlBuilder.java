@@ -12,10 +12,6 @@ public class UrlBuilder {
     public UrlBuilder(){
         valuesMap = new HashMap<>();
     }
-    public UrlBuilder(String url){
-        this();
-        this.url = url;
-    }
 
     public UrlBuilder param(String name, String value){
         if(!valuesMap.containsKey(name)){
@@ -34,7 +30,7 @@ public class UrlBuilder {
         return this;
     }
     public String build(){
-        StringBuilder sb = new StringBuilder(protocol + url + path + "?");
+        StringBuilder sb = new StringBuilder(protocol + url + path + (valuesMap.isEmpty() ? "": "?"));
         valuesMap.entrySet().stream().map(entry -> "&" + entry.getKey() + "=" + entry.getValue()).forEach(sb::append);
         return sb.toString();
     }

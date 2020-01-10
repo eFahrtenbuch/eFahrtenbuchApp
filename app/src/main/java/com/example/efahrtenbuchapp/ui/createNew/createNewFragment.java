@@ -214,12 +214,18 @@ public class createNewFragment extends Fragment {
         EditText literPro100km = root.findViewById(R.id.etVerbrauch);
         EditText sonstigesBetrag = root.findViewById(R.id.etExtrasKosten);
 
-        return new Fahrt(-1, parseDate(startDate), parseDate(endDate), parseTimeAndDate(startDate,  string(startTimeText)),
+        Adresse startAdresse = new Adresse(startAdresseID.get().intValue(), string(StartStreetText), string(StartNumberText), string(StartOrtText), Integer.parseInt(string(StartPLZText)), "");
+        Adresse endAdresse = new Adresse(startAdresseID.get().intValue(), string(EndStreetText), string(EndNumberText), string(EndOrtText), Integer.parseInt(string(EndPLZText)), "");
+
+        Fahrt fahrt = new Fahrt(-1, parseDate(startDate), parseDate(endDate), parseTimeAndDate(startDate,  string(startTimeText)),
                 parseTimeAndDate(endDate, string(endTimeText)), startAdresseID.get().intValue(), endAdresseID.get().intValue(),
                 string(reiseZweck), string(reiseRoute), string(besuchtePersonenFirmenBehoerden), asDouble(kmFahrtBeginn), asDouble(kmFahrtEnde),
                 asDouble(kmGeschaeftlich), asDouble(kmPrivat), asDouble(kmWohnArbeit), asDouble(kraftstoffLiter), asDouble(kraftstoffBetrag),
                 asDouble(literPro100km), asDouble(sonstigesBetrag), "", UserManager.getInstance().getUser().getBenutzername(),
                 false, spinner.getSelectedItem().toString());
+        fahrt.setStartAdresse(startAdresse);
+        fahrt.setZielAdresse(endAdresse);
+        return fahrt;
     }
 
     /**

@@ -3,11 +3,10 @@ package com.example.efahrtenbuchapp.ui.createNew;
 import eu.bitm.NominatimReverseGeocoding.Address;
 import eu.bitm.NominatimReverseGeocoding.NominatimReverseGeocodingJAPI;
 
-public class Coordinates<locationManager> {
+public class Coordinates {
 	
 	private NominatimReverseGeocodingJAPI RevGeo = new NominatimReverseGeocodingJAPI();
-	double lat;
-	double lon;
+	private double lat, lon;
 	
 	public Coordinates(double lan, double lon) {
 		super();
@@ -33,7 +32,6 @@ public class Coordinates<locationManager> {
 	public String getCity(){
 		String State = this.getAddress().getState();
 		String County = this.getAddress().getCounty();
-		
 		return !County.isEmpty() ? County + " " + State : State;
 	}
 	
@@ -45,8 +43,6 @@ public class Coordinates<locationManager> {
 		catch (Exception e) {
 			return -1;
 		}
-		
-		
 	}
 
 	public NominatimReverseGeocodingJAPI getRevGeo() {
@@ -68,8 +64,4 @@ public class Coordinates<locationManager> {
 	public void setLon(double lon) {
 		this.lon = lon;
 	}
-	
-	
-	
-
 }

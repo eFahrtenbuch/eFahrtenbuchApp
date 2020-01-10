@@ -18,6 +18,7 @@ import com.example.efahrtenbuchapp.R;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
 import com.example.efahrtenbuchapp.eFahrtenbuch.FahrtListAdapter;
 import com.example.efahrtenbuchapp.eFahrtenbuch.FahrtListenAdapter;
+import com.example.efahrtenbuchapp.eFahrtenbuch.UserManager;
 import com.example.efahrtenbuchapp.http.json.JSONConverter;
 import com.example.efahrtenbuchapp.http.HttpRequester;
 
@@ -30,16 +31,16 @@ public class TableFragment extends Fragment {
     private TableViewModel tableViewModel;
     private List<FahrtListAdapter> list;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         tableViewModel = ViewModelProviders.of(this).get(TableViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_table, container, false);
 
-        getActivity().setContentView(R.layout.fragment_table);
         ListView lv = root.findViewById(R.id.listviewidfrag);
 
 
 
-        HttpRequester.simpleJsonArrayRequest(getActivity(), "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
+        HttpRequester.simpleJsonArrayRequest(getActivity(), "http://10.0.2.2:8080/loadFahrtenListeForUser?userid="+ UserManager.getInstance().getUser().getId(), jsonResponse -> {
             Log.d("onCreate: ", jsonResponse.toString());
             List<FahrtListAdapter> list = JSONConverter.toJSONList(jsonResponse).stream()
                     .map(json -> (Fahrt) JSONConverter.createFahrtFromJSON(json))

@@ -1,7 +1,5 @@
 package com.example.efahrtenbuchapp.http.json;
 
-import android.util.Log;
-
 import com.example.efahrtenbuchapp.eFahrtenbuch.Adresse;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
 
@@ -62,38 +60,21 @@ public class JSONConverter {
     }
 
     public static Fahrt createFahrtFromJSON(JSONObject json){
-        String TAG = "createFahrtFromJSON: ";
-        Log.d(TAG, "createFahrtFromJSON: " + json.toString());
         JSONObject startAdresseJSON;
         JSONObject zielAdresseJSON;
         String[] elementsToRemove = {"startAdresse", "zielAdresse", "fahrtEndeDatum", "fahrtBeginnDatum", "fahrtBeginnZeit", "fahrtEndeZeit"};
         try {
-            Log.d(TAG, "ursprüngliche JSON von der ganzen Fahrt:" + json.toString());
             startAdresseJSON = json.getJSONObject("startAdresse");
-            Log.d(TAG, "startAdresse to JSON");
             zielAdresseJSON = json.getJSONObject("zielAdresse");
-            Log.d(TAG, "zielAdresse to JSON");
             Adresse start = JSONConverter.createObjectFromJSON(Adresse.class, startAdresseJSON);
-            Log.d(TAG, "startAdresse to Object");
-            Log.d(TAG, "JSON-RESPONSE: " + startAdresseJSON);
             Adresse ziel = JSONConverter.createObjectFromJSON(Adresse.class, zielAdresseJSON);
-            Log.d(TAG, "zielAdresse to Object");
-            Log.d(TAG, "JSON-RESPONSE: " + zielAdresseJSON);
-            json.remove("startAdresse");
             Arrays.stream(elementsToRemove).forEach(element -> {
-                Log.d(TAG, "Tries to remove " + element);
                 json.remove(element);
-                Log.d(TAG, "successfully removed " + element);
             });
 
             Fahrt fahrt = JSONConverter.createObjectFromJSON(Fahrt.class, json, elementsToRemove);
-            Log.d(TAG, "Fahrt to json");
             fahrt.setStartAdresse(start);
             fahrt.setZielAdresse(ziel);
-
-            Log.d(TAG, "Fahrt converted:");
-            Log.d(TAG, "Ziel-Adresse: " + fahrt.getZielAdresse());
-            Log.d(TAG, "Start-Adresse: " + fahrt.getStartAdresse());
             return fahrt;
         } catch (JSONException e) {
             e.printStackTrace();
