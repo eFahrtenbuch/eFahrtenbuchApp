@@ -1,7 +1,9 @@
 package com.example.efahrtenbuchapp.ui.createNew;
 
-import eu.bitm.NominatimReverseGeocoding.Address;
-import eu.bitm.NominatimReverseGeocoding.NominatimReverseGeocodingJAPI;
+
+import com.example.efahrtenbuchapp.reverseGeocoding.AddressGeocoding;
+
+import com.example.efahrtenbuchapp.reverseGeocoding.NominatimReverseGeocodingJAPI;
 
 public class Coordinates {
 	
@@ -14,7 +16,7 @@ public class Coordinates {
 		this.lon = lon;
 	}
 	
-	public Address getAddress(){
+	public AddressGeocoding getAddress(){
 		
 		return this.getRevGeo().getAdress(lat, lon);
 	}

@@ -17,7 +17,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +44,6 @@ import com.example.efahrtenbuchapp.http.json.JSONConverter;
 import com.example.efahrtenbuchapp.gps.LocationChangedListener;
 import com.example.efahrtenbuchapp.http.HttpRequester;
 import com.example.efahrtenbuchapp.http.UrlBuilder;
-
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;

@@ -11,7 +11,7 @@ public class FahrtListAdapter {
     public FahrtListAdapter(Fahrt fahrt){
         this.id = fahrt.getId();
         this.datum = DateUtils.getDate(fahrt.getFahrtBeginnDatum()) + "/" + DateUtils.getTime(fahrt.getFahrtBeginnZeit());
-        this.ziel = fahrt.getZielAdresse().getOrt();
+        this.ziel = fahrt.getReisezweck();
         this.km = Double.toString(fahrt.getKmFahrtEnde() - fahrt.getKmFahrtBeginn());
     }
 

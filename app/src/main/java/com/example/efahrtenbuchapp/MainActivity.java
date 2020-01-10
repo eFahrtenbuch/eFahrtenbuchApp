@@ -51,8 +51,14 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("MainActivity -> onLogin: ", "jsonUserResponse = " + jsonResponse);
                             login(response.equals("OK"), JSONConverter.createObjectFromJSON(User.class, jsonResponse));
                         },
-                        this::failedLogin);
-                }, this::failedLogin);
+                        error -> {
+                    failedLogin(error);
+                    dialog.hide();
+                        });
+                }, error -> {
+                failedLogin(error);
+                dialog.hide();
+            });
         });
         ((Button)findViewById(R.id.btNeuAccErstellen)).setOnClickListener(onClick -> {
             Intent myIntent = new Intent(this, RegisterActivity.class);
