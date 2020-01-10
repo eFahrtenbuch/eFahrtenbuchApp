@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
             }
             String username = ((TextView)findViewById(R.id.tfName)).getText().toString();
             String urlWithBuilder = new UrlBuilder().path("loginUser").param(username, username).param("hashedPasswort", pw).build();
-            String url = "http://10.0.2.2:8080//loginUser?username=" + username + "&hashedPasswort=" + pw;
-
+            String url = new UrlBuilder().path("loginUser").param("username", username).param("hashedPasswort", pw).build();
+            Log.d("LOGIN", "URL =  " + url);
             HttpRequester.simpleStringRequest(this, url, (String response) -> {
                 dialog.hide();
                 HttpRequester.simpleJsonRequest(this, new UrlBuilder().path("getUserbyUserName").param("username", username).build(),
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public void login(boolean success, User user){
         Toast.makeText(this, success ? "Login erfolgreich" : "Login fehlgeschlagen!",Toast.LENGTH_LONG).show();
 
-        if(success && user != null || true){
+        if(success && user != null){
             Intent myIntent = new Intent(this, MainActivity2.class);
             startActivity(myIntent);
             UserManager.getInstance().setUser(user);

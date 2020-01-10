@@ -156,7 +156,7 @@ public class createNewFragment extends Fragment {
        sendButton.setOnClickListener(click -> speichereFahrt(root, StartTimeText, StartDateText, EndTimeText, EndDateText, spinner));
 
 
-        int userid =  UserManager.getInstance().getUser().getId();
+        int userid = UserManager.getInstance().getUser().getId();
         String url = new UrlBuilder().path("getUserAutos").param("userid", Integer.toString(userid)).build();
         HttpRequester.simpleJsonArrayRequest(root.getContext(), url, jsonArrayResponse -> {
             List<Auto> autos = JSONConverter.mapToObjectList(Auto.class, jsonArrayResponse);
