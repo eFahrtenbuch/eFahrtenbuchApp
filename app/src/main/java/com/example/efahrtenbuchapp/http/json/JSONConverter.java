@@ -1,5 +1,7 @@
 package com.example.efahrtenbuchapp.http.json;
 
+import android.util.Log;
+
 import com.example.efahrtenbuchapp.eFahrtenbuch.Adresse;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Fahrt;
 
@@ -8,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -68,13 +72,23 @@ public class JSONConverter {
             zielAdresseJSON = json.getJSONObject("zielAdresse");
             Adresse start = JSONConverter.createObjectFromJSON(Adresse.class, startAdresseJSON);
             Adresse ziel = JSONConverter.createObjectFromJSON(Adresse.class, zielAdresseJSON);
+
+            Date fahrtBeginnDatum = new Date(json.getLong("fahrtBeginnDatum"));
+            Date fahrtEndeDatum = new Date(json.getLong("fahrtEndeDatum"));
+            Time fahrtBeginnZeit = new Time(fahrtBeginnDatum.getTime() + json.getLong("fahrtBeginnZeit"));
+            Time fahrtEndeZeit = new Time(fahrtBeginnDatum.getTime() + json.getLong("fahrtEndeZeit"));
             Arrays.stream(elementsToRemove).forEach(element -> {
                 json.remove(element);
             });
 
             Fahrt fahrt = JSONConverter.createObjectFromJSON(Fahrt.class, json, elementsToRemove);
+            fahrt.setFahrtBeginnZeit(fahrtBeginnZeit);
+            fahrt.setFahrtBeginnDatum(fahrtBeginnDatum);
+            fahrt.setFahrtEndeZeit(fahrtEndeZeit);
+            fahrt.setFahrtEndeDatum(fahrtEndeDatum);
             fahrt.setStartAdresse(start);
             fahrt.setZielAdresse(ziel);
+            Log.d("JSONConverter", "createFahrtFromJSON: " + fahrt.toString());
             return fahrt;
         } catch (JSONException e) {
             e.printStackTrace();

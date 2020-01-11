@@ -1,5 +1,7 @@
 package com.example.efahrtenbuchapp.utils;
 
+import android.util.Log;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.text.DateFormat;
@@ -16,7 +18,9 @@ public class DateUtils {
 	 * @return Aktuelles Datum als String im Format: TT.MM.YYYY (DOY)
 	 */
 	public static String getDate(java.util.Date date){
-		return String.format("%02d.%02d.%04d", date.getDay(),date.getMonth() + 1,date.getYear() + 1900);
+		String dateString = date.toString();
+		return String.format("%02d.%02d.%04d", Integer.parseInt(dateString.substring(8, 10)), Integer.parseInt(dateString.substring(5, 7)), Integer.parseInt(dateString.substring(0, 4)) );
+		//return String.format("%02d.%02d.%04d", date.getDay(), date.getMonth() + 1,date.getYear() + 1900);
 	}
 
 	public static String getTime(java.util.Date time){
