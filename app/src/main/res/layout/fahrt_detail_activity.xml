@@ -67,7 +67,7 @@
                 android:id="@+id/etEndTimeDetail"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="103dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="3dp"
                 android:background="?attr/actionModeBackground"
                 android:ems="10"
@@ -111,7 +111,7 @@
                 android:id="@+id/etEndPLZDetail"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="11dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="-1dp"
                 android:background="?attr/actionModeBackground"
                 android:ems="10"
@@ -310,7 +310,7 @@
                 android:id="@+id/etEndNrDetail"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="10dp"
                 android:background="?attr/actionModeBackground"
                 android:ems="10"
                 android:hint="Nummer"
@@ -367,7 +367,7 @@
                 android:id="@+id/etEndStreetDetail"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="3dp"
                 android:background="?attr/actionModeBackground"
                 android:ems="10"
@@ -376,7 +376,7 @@
                 android:paddingLeft="25px"
                 app:layout_constraintEnd_toStartOf="@+id/etEndNrDetail"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etStartKmDetail" />
+                app:layout_constraintTop_toBottomOf="@+id/etEndTimeDetail" />
 
             <TextView
                 android:id="@+id/tvStopDetail"
