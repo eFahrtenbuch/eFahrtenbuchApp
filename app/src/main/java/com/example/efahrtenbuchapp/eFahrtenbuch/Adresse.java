@@ -21,6 +21,7 @@ public class Adresse {
 	//For JSON Converter
 	public Adresse(){}
 
+	//Konstruktor
 	public Adresse(String strasse, String hausnummer, String ort, int plz, String zusatz) {
 		super();
 		this.strasse = strasse;
@@ -38,6 +39,8 @@ public class Adresse {
 		this.plz = plz;
 		this.zusatz = zusatz;
 	}
+
+	// Getter & Setter
 	public int getId() {
 		return id;
 	}
@@ -79,6 +82,7 @@ public class Adresse {
 		this.zusatz = zusatz;
 	}
 
+
 	@Override
 	public String toString(){
 		return "Adresse [ID: " + id + " Straße:" + strasse +
@@ -86,6 +90,12 @@ public class Adresse {
 				" PLZ: " + plz + " Zusatz" + zusatz + "]";
 	}
 
+	/**
+	 * Sendet http Request an Webservice zum speichern der Adresse
+	 * @param context
+	 * @param listener
+	 * @param errorListener
+	 */
 	public void speichere(Context context, Response.Listener<String> listener, Response.ErrorListener errorListener){
 		String url = new UrlBuilder().path("insertAdresseifNotAvailable")
 				.param("strasse", strasse)

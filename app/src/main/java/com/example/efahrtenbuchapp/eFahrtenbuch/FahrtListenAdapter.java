@@ -20,12 +20,27 @@ public class FahrtListenAdapter extends ArrayAdapter<FahrtListAdapter> {
     private final int resource;
     private Context context;
 
+    /**
+     * Konstruktor
+     * @param context
+     * @param resource
+     * @param objects
+     */
+
     public FahrtListenAdapter(@NonNull Context context, int resource, List<FahrtListAdapter> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
     }
 
+
+    /**
+     * Erstellt einzelne Elemente die in der Fahrtenliste angezeigt werden.
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
 

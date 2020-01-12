@@ -8,6 +8,10 @@ public class FahrtListAdapter {
     private String ziel;
     private String km;
 
+    /**
+     * Konstruktor
+     * @param fahrt
+     */
     public FahrtListAdapter(Fahrt fahrt){
         this.id = fahrt.getId();
         this.datum = DateUtils.getDate(fahrt.getFahrtBeginnDatum()) + "/" + DateUtils.getTime(fahrt.getFahrtBeginnZeit());
@@ -15,6 +19,8 @@ public class FahrtListAdapter {
         this.km = Double.toString(fahrt.getKmFahrtEnde() - fahrt.getKmFahrtBeginn());
     }
 
+
+    //GETTER & SETTER
     public String getDatum() {
         return datum;
     }

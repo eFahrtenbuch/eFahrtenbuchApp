@@ -12,7 +12,8 @@ public class Auto {
 
 	//For JSONConverter
 	public Auto(){ }
-	
+
+	//Konstruktor
 	public Auto(String kennzeichen, String modell, String passwort, int kmStand) {
 		super();
 		this.kennzeichen = kennzeichen;
@@ -50,6 +51,12 @@ public class Auto {
 	public String toString() {
 		return kennzeichen + "(" + modell + ")";
 	}
+
+	/**
+	 * Vergleicht Autoobjekte anhand von Kennzeichen
+	 * @param obj
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if(this == null ^ obj == null) {
@@ -58,6 +65,11 @@ public class Auto {
 		return this.getKennzeichen().equals(((Auto)obj).getKennzeichen());
 	}
 
+	/**
+	 * Erstellt Auto aus JSON Objekt
+	 * @param json
+	 * @return
+	 */
 	public static Auto createFromJSON(JSONObject json){
 		return JSONConverter.createObjectFromJSON(Auto.class, json);
 	}

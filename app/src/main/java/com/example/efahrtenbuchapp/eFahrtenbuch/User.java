@@ -13,6 +13,13 @@ public class User implements Cloneable {
 	private String name;
 	private String vorname;
 
+	/**
+	 * Konstruktor
+	 * @param id
+	 * @param benutzername
+	 * @param name
+	 * @param vorname
+	 */
 	public User(int id, String benutzername, String name, String vorname) {
 		super();
 		this.id = id;
@@ -21,10 +28,8 @@ public class User implements Cloneable {
 		this.vorname = vorname;
 	}
 
-	public User(){
-		//For JsonConverter
-	}
 
+	// GETTER & SETTER
 	public int getId() {
 		return id;
 	}

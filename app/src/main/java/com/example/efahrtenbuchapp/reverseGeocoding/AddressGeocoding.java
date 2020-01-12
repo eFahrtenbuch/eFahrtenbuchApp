@@ -5,6 +5,9 @@ package com.example.efahrtenbuchapp.reverseGeocoding;
 // (powered by Fernflower decompiler)
 //
 
+// Das ist eine Library die genutzt wurde um aus Koordinaten eine Adresse zu erhalten
+// Quelle: https://www.daniel-braun.com/technik/reverse-geocoding-library-for-java/
+
 
 
 import org.json.JSONException;

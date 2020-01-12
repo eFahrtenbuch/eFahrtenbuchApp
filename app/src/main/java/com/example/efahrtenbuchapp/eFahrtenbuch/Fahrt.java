@@ -72,7 +72,12 @@ public class Fahrt implements Comparable<Fahrt>{
 		this.edited = edited;
 		this.kennzeichen = kennzeichen;
 	}
-	
+
+	/**
+	 * Vergleicht die IDs von Fahrten
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public int compareTo(Fahrt o) {
 		if(this.id > o.getId()) return 1;
@@ -80,42 +85,21 @@ public class Fahrt implements Comparable<Fahrt>{
 		return 0;
 	}
 
-	
-	@SuppressWarnings("deprecation")
-	public String getFahrzeit() {
-
-		Date ld1 = new Date(this.fahrtBeginnDatum.getTime() + this.fahrtBeginnZeit.getTime());
-		Date ld2 = new Date(this.fahrtEndeDatum.getTime() + this.fahrtEndeZeit.getTime());
-		Date ergebnis = new Date(DateUtils.getDateDiff(ld1, ld2, TimeUnit.MILLISECONDS) - 1000*60*60);
-		int tage = (int) ergebnis.getTime() / 1000 / 60 / 60 / 24;
-		if(tage > 0)
-		{
-			return String.format("Tage: %d; %02d:%02d H",  tage, ergebnis.getHours(), ergebnis.getMinutes());
-		}
-		return String.format("%02d:%02d H", ergebnis.getHours(), ergebnis.getMinutes());
-	}
-
+	/**
+	 * Gibt die Fahrzeit als String aus
+	 * @param datum
+	 * @return
+	 */
 	@SuppressWarnings("deprecation")
 	private String fahrzeitString(Date datum)
 	{
 		return String.format("%02d:%02d", datum.getMinutes(), datum.getHours());
 	}
 
-	public boolean isInDateRange(Date from, Date to)
-	{
-		return fahrtBeginnDatum.equals(from) || fahrtBeginnDatum.equals(to) || (fahrtBeginnDatum.before(to) && fahrtBeginnDatum.after(from));
-	}
-
-	public boolean isInIdRange(int from, int to)
-	{
-		return this.id >= from && this.id <= to;
-	}
-
-	public boolean isFahrerOrEmpty(String fahrer)
-	{
-		return this.fahrerName.equals(fahrer) || fahrer.equals("") || fahrer.equals("null");
-	}
-
+	/**
+	 * Erstellt JSON Objekt aus dem aktuellen Objekt
+	 * @return
+	 */
 	public JSONObject toJSONObject(){
 		JSONObject json = new JSONObject();
 		try {
