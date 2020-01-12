@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Fahrtenliste
+ */
 public class TableFragment extends Fragment {
 
     private TableViewModel tableViewModel;
@@ -34,43 +37,30 @@ public class TableFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         tableViewModel = ViewModelProviders.of(this).get(TableViewModel.class);
-
         View root = inflater.inflate(R.layout.fragment_table, container, false);
-
         ListView lv = root.findViewById(R.id.listviewidfrag);
 
 
-    String url = new UrlBuilder().path("loadFahrtenListeForUser").param("userid", Integer.toString(UserManager.getInstance().getUser().getId())).build();
+        String url = new UrlBuilder().path("loadFahrtenListeForUser").param("userid", Integer.toString(UserManager.getInstance().getUser().getId())).build();
+        //Asynchrones Laden aller Fahrten
         HttpRequester.simpleJsonArrayRequest(getActivity(), url, jsonResponse -> {
-            Log.d("onCreate: ", jsonResponse.toString());
             List<FahrtListAdapter> list = JSONConverter.toJSONList(jsonResponse).stream()
                     .map(json -> (Fahrt) JSONConverter.createFahrtFromJSON(json))
-                    .peek(fahrt -> Log.d("TABLEFRAGMENT", fahrt.toString()))
                     .map(fahrt -> new FahrtListAdapter(fahrt))
                     .collect(Collectors.toList());
             refreshList(lv, list);
         }, null);
-
-        FahrtListenAdapter adapter = new FahrtListenAdapter(getActivity(), R.layout.fahrt_list_adapter, new ArrayList());
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "DDD", Toast.LENGTH_LONG);
-                System.out.println("dddddd");
-                Log.d("KLICKED ON: ", "Item: " + list.get(position).toString());
-            }
-        });
         return root;
     }
 
-    public void message(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-    }
-
+    /**
+     * Aktualisiert die Liste
+     * @param root
+     * @param list die neuen Elemente der Liste
+     */
     public void refreshList(View root, List<FahrtListAdapter> list){
         this.list = list;
-        ListView lv = getActivity().findViewById(R.id.listviewidfrag);          //R.layout.fahrt_list_adapter
+        ListView lv = getActivity().findViewById(R.id.listviewidfrag);
         ArrayAdapter adapter = new FahrtListenAdapter(getActivity(), R.layout.fahrt_list_adapter, list);
         lv.setAdapter(adapter);
     }

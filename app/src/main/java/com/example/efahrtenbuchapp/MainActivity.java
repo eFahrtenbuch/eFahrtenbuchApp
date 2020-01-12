@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,64 +29,69 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-        Log.d("MainActivity -> onCreate: ", "started");
-        Button btAnmelden = findViewById(R.id.btAnmelden);
+        //Listener für den Login-Button
+        Button loginButton = findViewById(R.id.btAnmelden);
+        loginButton.setOnClickListener(this::doLoginCheck);
+        TextView passwordFeld = findViewById(R.id.tfPasswort);
+        passwordFeld.setOnEditorActionListener((v, actionId, event) -> doLoginCheck(v));
 
-        btAnmelden.setOnClickListener(click -> {
-            //TODO
-            ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
-                    "Verbinde...", true);
-            String pw = null;
-            try {
-                pw = PasswordHelper.getEncryptedPassword(((TextView)findViewById(R.id.tfPasswort)).getText().toString());
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-            String username = ((TextView)findViewById(R.id.tfName)).getText().toString();
-            String urlWithBuilder = new UrlBuilder().path("loginUser").param(username, username).param("hashedPasswort", pw).build();
-            String url = new UrlBuilder().path("loginUser").param("username", username).param("hashedPasswort", pw).build();
-            Log.d("LOGIN", "URL =  " + url);
-            HttpRequester.simpleStringRequest(this, url, (String response) -> {
-                dialog.hide();
-                HttpRequester.simpleJsonRequest(this, new UrlBuilder().path("getUserbyUserName").param("username", username).build(),
-                        jsonResponse -> {
-                            Log.d("MainActivity -> onLogin: ", "jsonUserResponse = " + jsonResponse);
-                            login(response.equals("OK"), JSONConverter.createObjectFromJSON(User.class, jsonResponse));
-                        },
-                        error -> {
-                    failedLogin(error);
-                    dialog.hide();
-                        });
-                }, error -> {
-                failedLogin(error);
-                dialog.hide();
-            });
-        });
         ((Button)findViewById(R.id.btNeuAccErstellen)).setOnClickListener(onClick -> {
+            //Öffnet das Registrierungsfenster
             Intent myIntent = new Intent(this, RegisterActivity.class);
             startActivity(myIntent);
         });
-
-        ((TextView)findViewById(R.id.textView3)).setOnClickListener(onClick -> {
-            HttpRequester.simpleJsonArrayRequest(this, "http://10.0.2.2:8080/loadFahrtenListe?kennzeichen=B OB 385", jsonResponse -> {
-                Log.d("onCreate: ", jsonResponse.toString());
-                Toast.makeText(MainActivity.this, jsonResponse.toString(), Toast.LENGTH_LONG).show();
-                Intent myIntent = new Intent(this, ListViewActivity.class);
-                startActivity(myIntent);
-            }, error -> Log.d("ERROR LISTENER:", error.toString()));
-        });
     }
+
+    private boolean doLoginCheck(View v) {
+        ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
+                "Verbinde...", true);
+        String pw = null;
+        try {
+            //Verschlüsselt das Passwort bevor es abgeschickt wird
+            pw = PasswordHelper.getEncryptedPassword(((TextView)findViewById(R.id.tfPasswort)).getText().toString());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        String username = ((TextView)findViewById(R.id.tfName)).getText().toString();
+        String url = new UrlBuilder().path("loginUser").param("username", username).param("hashedPasswort", pw).build();
+        HttpRequester.simpleStringRequest(this, url, (String response) -> {
+            dialog.hide();
+            HttpRequester.simpleJsonRequest(this, new UrlBuilder().path("getUserbyUserName").param("username", username).build(),
+                    jsonResponse -> {
+                        dialog.hide();
+                        login(response.equals("OK"), JSONConverter.createObjectFromJSON(User.class, jsonResponse));
+                    },
+                    error -> {
+                        failedLogin(error);
+                        dialog.hide();
+                    });
+            }, error -> {
+            failedLogin(error);
+            dialog.hide();
+        });
+        return true;
+    }
+
+    /**
+     * Prüft den Login und leitet ggf. Weiter
+     * @param success
+     * @param user
+     */
     public void login(boolean success, User user){
         Toast.makeText(this, success ? "Login erfolgreich" : "Login fehlgeschlagen!",Toast.LENGTH_LONG).show();
 
         if(success && user != null){
-            Intent myIntent = new Intent(this, MainActivity2.class);
+            Intent myIntent = new Intent(this, NavigationActivity.class);
             startActivity(myIntent);
             UserManager.getInstance().setUser(user);
-            //KANN WEGLog.d("LOGIN SUCCESFULL WITH USER = ", user.toString());
             this.finish();
         }
     }
+
+    /**
+     * Fehler beim Login
+     * @param error
+     */
     public void failedLogin(VolleyError error){
         error.printStackTrace();
         login(false, null);

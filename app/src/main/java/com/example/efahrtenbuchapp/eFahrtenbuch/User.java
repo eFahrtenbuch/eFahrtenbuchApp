@@ -9,9 +9,14 @@ public class User implements Cloneable {
 	private int id;
 	//Max Länge 64 Zeichen
 	private String benutzername;
-	//Vor- und Nachname aus der DB max. L�nge 64 Zeichen
+	//Vor- und Nachname aus der DB max. länge 64 Zeichen
 	private String name;
 	private String vorname;
+
+	/**
+	 * Wird für JSONConverter gebraucht
+	 */
+	public User(){}
 
 	/**
 	 * Konstruktor

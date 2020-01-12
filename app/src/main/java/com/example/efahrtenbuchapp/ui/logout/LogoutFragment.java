@@ -15,6 +15,7 @@ public class LogoutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LogoutViewModel logoutViewModel = ViewModelProviders.of(this).get(LogoutViewModel.class);
         logoutViewModel.getText().observe(this, s -> {
+            //Schließt die App und setzt vorher den User auf Null
             UserManager.getInstance().setUser(null);
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);

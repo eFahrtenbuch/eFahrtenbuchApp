@@ -34,7 +34,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.Request;
-import com.example.efahrtenbuchapp.MainActivity2;
+import com.example.efahrtenbuchapp.NavigationActivity;
 import com.example.efahrtenbuchapp.R;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Adresse;
 import com.example.efahrtenbuchapp.eFahrtenbuch.Auto;
@@ -269,6 +269,7 @@ public class createNewFragment extends Fragment {
         EndAddressButton.setOnClickListener(click -> createGpsThread(locationManager, Lat, Lon, EndStreetText, EndNumberText, EndPLZText, EndOrtText, locationListener, requireContext()).start());
     }
 
+    /** Für die Abfrage nach der Standort-Berechtigung*/
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] ergebnis) {
         if (requestCode == 1) {
             if (ergebnis.length > 0 && ergebnis[0] == PackageManager.PERMISSION_GRANTED) {
@@ -277,9 +278,9 @@ public class createNewFragment extends Fragment {
                 createNoGpsPermissionBenachrichtigung();
             }
         }
-        showLongToast("requestCode " + requestCode);
     }
 
+    /** Öffnet die Google Maps Navigation mit der angegeben Adresse*/
     private void openGoogleMapsNavigation(EditText endStreetText, EditText endNumberText, EditText endPLZText, EditText endOrtText) {
         String zielAdresse = endStreetText.getText() + " " + endNumberText.getText() + " " + endPLZText.getText() + " " + endOrtText.getText();
         Uri gmmIntentUri = Uri.parse("google.navigation:q=" + zielAdresse);
@@ -293,6 +294,7 @@ public class createNewFragment extends Fragment {
         lon.set(location.getLongitude());
     }
 
+    /** Erstellt den Thread für die Abfrage der GPS-Koordinaten*/
     private Thread createGpsThread(LocationManager locationManager, AtomicReference<Double> lat, AtomicReference<Double> lon, EditText endStreetText,
                                    EditText endNumberText, EditText endPLZText, EditText endOrtText, LocationListener locationListener, Context context) {
         return new Thread(() -> {
@@ -308,9 +310,9 @@ public class createNewFragment extends Fragment {
         });
     }
 
-    @SuppressLint("MissingPermission")
+    /** Holt die Adresse anhand der Reverse-Geocoding-API und setzt diese in die GUI*/
+    @SuppressLint("MissingPermission")//Kann hier ignoriert werden, da die Abfrage nach der Permission woanders passiert
     private void holeUndSetzeAdresse(LocationManager locationManager, AtomicReference<Double> lat, AtomicReference<Double> lon, EditText endStreetText, EditText endNumberText, EditText endPLZText, EditText endOrtText, LocationListener locationListener) {
-        //TODO: Permissionabfrage
         locationManager.requestLocationUpdates(locationManager.getBestProvider(new Criteria(), true), 0, 0, locationListener);
         Coordinates NewAddress = new Coordinates(lat.get(), lon.get());
         endStreetText.setText(NewAddress.getStreet());
@@ -320,19 +322,22 @@ public class createNewFragment extends Fragment {
         getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Position wurde erfolgreich ermittelt", Toast.LENGTH_SHORT).show());
     }
 
+    /** Erstellt den Datepicker-Dialog für die Datumsfelder*/
     private DatePickerDialog createDatePickerDialog(Calendar rightNow, TextView textView) {
         DatePickerDialog.OnDateSetListener listener = (datePicker, year, month, day) -> textView.setText(formatDateAsString(day, month, year));
         return new DatePickerDialog(getActivity(), listener, getYear(rightNow), getMonth(rightNow), getDay(rightNow));
     }
 
-    private final void createSpinnerAdapter(Spinner spinner, List<String> elemente) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, elemente);
-        spinner.setAdapter(adapter);
-    }
-
+    /** Erstellt den Timepicker-Dialog für die Zeitfelder*/
     private final TimePickerDialog createTimepickerDialog(Calendar rightNow, TextView textView) {
         TimePickerDialog.OnTimeSetListener listener = (timePicker, hourOfDay, minutes) -> textView.setText(formatTimeAsString(hourOfDay, minutes));
         return new TimePickerDialog(getActivity(), listener, rightNow.get(Calendar.HOUR_OF_DAY), rightNow.get(Calendar.MINUTE), true);
+    }
+
+    /** Setzt den Adapter auf den Spinner mit den angegeben Elementen*/
+    private final void createSpinnerAdapter(Spinner spinner, List<String> elemente) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, elemente);
+        spinner.setAdapter(adapter);
     }
 
     /**
@@ -344,14 +349,24 @@ public class createNewFragment extends Fragment {
         return String.format("%02d:%02d", cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE));
     }
 
+    /**
+     * Gibt die Zeit zurück im Format HH:MM
+     */
     private String formatTimeAsString(int hour, int minute){
         return String.format("%02d:%02d", hour, minute);
     }
 
+    /**
+     * Gibt das Datum zurück im Format DD.MM.YYYY
+     * @param cal
+     * @return die Zeit als String
+     */
     private String formatDateAsString(Calendar cal){
         return String.format("%02d.%02d.%04d", getDay(cal), getMonth(cal),  getYear(cal));
     }
-
+    /**
+     * Gibt das Datum zurück im Format DD.MM.YYYY
+     * */
     private String formatDateAsString(int day, int month, int year){
         return String.format("%02d.%02d.%04d", day, month + 1, year);
     }
@@ -366,14 +381,21 @@ public class createNewFragment extends Fragment {
         return calendar.get(Calendar.YEAR);
     }
 
+    /**
+     * Erstellt und zeigt einen Toast an
+     * @param text der Text für den Toast
+     */
     private void showLongToast(String text){
         getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show());
     }
 
+    /**
+     * Erstellt eine Benachrichtigung für den Fall das die Standort-Permission nicht zugelassen wird
+     */
     private void createNoGpsPermissionBenachrichtigung(){
-        PendingIntent pi = PendingIntent.getActivity(getActivity(), 0, new Intent(getActivity(), MainActivity2.class), PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pi = PendingIntent.getActivity(getActivity(), 0, new Intent(getActivity(), NavigationActivity.class), PendingIntent.FLAG_ONE_SHOT);
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity(), MainActivity2.BENACHRICHTIGUNG_CHANNEL_ID)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity(), NavigationActivity.BENACHRICHTIGUNG_CHANNEL_ID)
                 .setSmallIcon(R.drawable.error)
                 .setContentTitle("eFahrtenbuch")
                 .setContentText(getString(R.string.notificationNoLocationPermission))

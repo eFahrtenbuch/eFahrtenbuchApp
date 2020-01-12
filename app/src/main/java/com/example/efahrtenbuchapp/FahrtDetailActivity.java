@@ -6,8 +6,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ import com.example.efahrtenbuchapp.http.UrlBuilder;
 import com.example.efahrtenbuchapp.utils.DateUtils;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.List;
 
 public class FahrtDetailActivity extends AppCompatActivity {
 
@@ -36,7 +40,10 @@ public class FahrtDetailActivity extends AppCompatActivity {
         TextView tv =  findViewById(R.id.etEndTimeDetail);
         tv.setText("XXXXXX - " + value);
         String url = new UrlBuilder().path("loadFahrt").param("fahrtid", Integer.toString(value)).build();
-        HttpRequester.simpleJsonRequest(this, url, jsonResponse -> setFahrt(JSONConverter.createFahrtFromJSON(jsonResponse)),
+        HttpRequester.simpleJsonRequest(this, url, jsonResponse -> {
+                    Log.d("FahrtDetailActivity", "FAHRT JSON = " + jsonResponse.toString());
+            setFahrt(JSONConverter.createFahrtFromJSON(jsonResponse));
+                },
                 error -> Toast.makeText(this, "Fehler beim laden der Fahrt ID=" + value, Toast.LENGTH_SHORT));
     }
 
@@ -90,6 +97,8 @@ public class FahrtDetailActivity extends AppCompatActivity {
         TextView literPro100km = findViewById(R.id.etVerbrauchDetail);
         TextView sonstigesBetrag = findViewById(R.id.etExtrasKostenDetail);
 
+        Spinner spinner = findViewById(R.id.spinnerDetail);
+
         reiseRoute.setText(fahrt.getReiseroute());
         reiseZweck.setText(fahrt.getReisezweck());
         besuchtePersonenFirmenBehoerden.setText(fahrt.getBesuchtePersonenFirmenBehoerden());
@@ -102,5 +111,15 @@ public class FahrtDetailActivity extends AppCompatActivity {
         kraftstoffBetrag.setText(Double.toString(fahrt.getKraftstoffBetrag()));
         literPro100km.setText(Double.toString(fahrt.getLiterPro100km()));
         sonstigesBetrag.setText(Double.toString(fahrt.getSonstigesBetrag()));
+
+        createSpinnerAdapter(spinner, Arrays.asList(new String[]{fahrt.getKennzeichen()}));
+    }
+
+    /** Setzt den Adapter auf den Spinner mit den angegeben Elementen*/
+    private final void createSpinnerAdapter(Spinner spinner, List<String> elemente) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, elemente);
+        spinner.setAdapter(adapter);
     }
 }
+
+

@@ -16,8 +16,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity2 extends AppCompatActivity {
-
+/**
+ * Drawer für die Navigation
+ */
+public class NavigationActivity extends AppCompatActivity {
 
     public final static String BENACHRICHTIGUNG_CHANNEL_ID = "1";
 
@@ -33,8 +35,6 @@ public class MainActivity2 extends AppCompatActivity {
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorAccent));
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.table, R.id.logout)
                 .setDrawerLayout(drawer)
@@ -55,6 +55,9 @@ public class MainActivity2 extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 
+    /**
+     * Erstellt einen CHannel für die Notification
+     */
     private void createNotificationChannel() {
         NotificationChannel channel = new NotificationChannel(BENACHRICHTIGUNG_CHANNEL_ID, "name", NotificationManager.IMPORTANCE_DEFAULT);
         channel.setDescription("description");

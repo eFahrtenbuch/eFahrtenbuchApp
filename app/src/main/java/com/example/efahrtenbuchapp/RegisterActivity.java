@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.efahrtenbuchapp.http.UrlBuilder;
 import com.example.efahrtenbuchapp.http.WebServiceRessources;
 import com.example.efahrtenbuchapp.helper.PasswordHelper;
 import com.example.efahrtenbuchapp.http.HttpRequester;
@@ -21,9 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
-        Button btn = (Button) findViewById(R.id.btAccountErstellen);
-        Log.d("", "button: " + btn);
-        btn.setOnClickListener((event) -> {
+        findViewById(R.id.btAccountErstellen).setOnClickListener((event) -> {
             ProgressDialog dialog = ProgressDialog.show(RegisterActivity.this, "",
                     "Verbinde...", true);
             TextView userName = (TextView) findViewById(R.id.tfNameRegister);
@@ -32,22 +31,31 @@ public class RegisterActivity extends AppCompatActivity {
             String hashedPasswort = null;
             try {
                 hashedPasswort = PasswordHelper.getEncryptedPassword(password1.getText().toString());
-                Log.d("", "onCreate: RegisterActivity: PW before hash: " + password1.getText().toString());
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
+            String urlWithBuilder = new UrlBuilder().path("registerUser")
+                    .param("username", userName.getText().toString())
+                    .param("hashedPasswort", hashedPasswort)
+                    .param("name", " ")
+                    .param("vorname", " ").build();
             String url = "http://10.0.2.2:8080/registerUser?username=" + userName.getText().toString() + "&hashedPasswort=" + hashedPasswort + "&name=x&vorname=y";
-            Log.d("", "onCreate: " + url);
-            HttpRequester.simpleStringRequest(this, url, (String response) -> {
-                message(response.equals("OK") ? "Erfolgreich registriert!" : "Registrierung nicht möglich");
+
+            HttpRequester.simpleStringRequest(this, urlWithBuilder, (String response) -> {
+                boolean success = response.equals("OK");
+                message(success ? "Erfolgreich registriert!" : "Registrierung nicht möglich");
                 dialog.dismiss();
+                if(success){
+                    //Beendet die RegisterActivity wenn Registration erfolgreich
+                    //damit sich der user direkt einloggen kann.
+                    this.finish();
+                }
             }, error -> {
                 message(WebServiceRessources.ERROR_NO_CONN_LONG);
                 dialog.dismiss();
             });
         });
     }
-
     public void message(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
