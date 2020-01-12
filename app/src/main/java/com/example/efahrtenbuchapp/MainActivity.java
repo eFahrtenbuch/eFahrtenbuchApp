@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**Führt den Loginprozess durch*/
     private boolean doLoginCheck(View v) {
         ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
                 "Verbinde...", true);
