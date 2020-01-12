@@ -38,7 +38,7 @@
                 android:id="@+id/etEndDateDetail"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="40dp"
                 android:background="?attr/actionModeBackground"
                 android:ems="10"
                 android:hint="Datum"
@@ -46,7 +46,7 @@
                 android:paddingLeft="25px"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/etEndTimeDetail"
-                app:layout_constraintTop_toBottomOf="@+id/btGetStartAdressDetail" />
+                app:layout_constraintTop_toBottomOf="@+id/etStartKmDetail" />
 
             <TextView
                 android:id="@+id/etStartStreetDetail"
@@ -63,23 +63,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etStartTimeDetail" />
 
-            <Button
-                android:id="@+id/btGetEndAdressDetail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
-                android:background="#AD0010"
-                android:text="Adresse erfassen"
-                android:textColor="#FFFFFF"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etEndKmDetail" />
-
             <TextView
                 android:id="@+id/etEndTimeDetail"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="103dp"
                 android:layout_marginEnd="3dp"
                 android:background="?attr/actionModeBackground"
                 android:ems="10"
@@ -88,7 +76,7 @@
                 android:paddingLeft="25px"
                 app:layout_constraintEnd_toStartOf="@+id/etEndDateDetail"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btGetStartAdressDetail" />
+                app:layout_constraintTop_toBottomOf="@+id/etStartKmDetail" />
 
             <TextView
                 android:id="@+id/etStartOrtDetail"
@@ -133,43 +121,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/etEndOrtDetail"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etEndStreetDetail" />
-
-            <Button
-                android:id="@+id/btGetStartAdressDetail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="#AD0010"
-                android:text="Adresse erfassen"
-                android:textColor="#FFFFFF"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etStartKmDetail" />
-
-            <Button
-                android:id="@+id/btStartNavDetail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="#AD0010"
-                android:text="Navigation Starten"
-                android:textColor="#FFFFFF"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerDetail" />
-
-            <Button
-                android:id="@+id/btSubmitDetail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="#AD0010"
-                android:text="fahrt erstellen"
-                android:textColor="#FFFFFF"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.487"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btStartNavDetail" />
 
             <TextView
                 android:id="@+id/etEndKmDetail"
@@ -416,7 +367,7 @@
                 android:id="@+id/etEndStreetDetail"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="3dp"
                 android:background="?attr/actionModeBackground"
                 android:ems="10"
@@ -425,7 +376,7 @@
                 android:paddingLeft="25px"
                 app:layout_constraintEnd_toStartOf="@+id/etEndNrDetail"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etEndDateDetail" />
+                app:layout_constraintTop_toBottomOf="@+id/etStartKmDetail" />
 
             <TextView
                 android:id="@+id/tvStopDetail"
@@ -437,7 +388,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btGetStartAdressDetail" />
+                app:layout_constraintTop_toBottomOf="@+id/etStartKmDetail" />
 
             <TextView
                 android:id="@+id/tvStop2Detail"
@@ -449,7 +400,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btGetEndAdressDetail" />
+                app:layout_constraintTop_toBottomOf="@+id/etEndKmDetail" />
 
             <TextView
                 android:id="@+id/tvStop3Detail"
@@ -480,7 +431,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="24dp"
                 android:background="?attr/actionModeBackground"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etArbeitswegDetail" />
