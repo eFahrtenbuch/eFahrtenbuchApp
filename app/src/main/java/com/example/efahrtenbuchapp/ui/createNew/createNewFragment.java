@@ -77,6 +77,19 @@ public class createNewFragment extends Fragment {
     /*Buttons*/
     private Button EndAddressButton;
     private Button AddressButton;
+    /*Der Rest*/
+    private EditText reiseRoute;
+    private EditText reiseZweck;
+    private EditText besuchtePersonenFirmenBehoerden;
+    private EditText kmFahrtBeginn;
+    private EditText kmFahrtEnde;
+    private EditText kmGeschaeftlich;
+    private EditText kmPrivat;
+    private EditText kmWohnArbeit;
+    private EditText kraftstoffLiter;
+    private EditText kraftstoffBetrag;
+    private EditText literPro100km;
+    private     EditText sonstigesBetrag;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -124,6 +137,26 @@ public class createNewFragment extends Fragment {
         EndTimeText.setInputType(InputType.TYPE_NULL);
         EndDateText.setInputType(InputType.TYPE_NULL);
 
+        //Rest
+        kmFahrtBeginn = root.findViewById(R.id.etStartKm);
+        kmFahrtEnde = root.findViewById(R.id.etEndKm);
+        kmGeschaeftlich = root.findViewById(R.id.etGeschaeftlichGef);
+        kmPrivat = root.findViewById(R.id.etPrivatGef);
+        kmWohnArbeit = root.findViewById(R.id.etArbeitsweg);
+        kraftstoffLiter = root.findViewById(R.id.etLiterbetrag);
+        kraftstoffBetrag = root.findViewById(R.id.etSprittkosten);
+        literPro100km = root.findViewById(R.id.etVerbrauch);
+        sonstigesBetrag = root.findViewById(R.id.etExtrasKosten);
+        //Inputtype für Nummern
+        kmFahrtBeginn.setInputType(InputType.TYPE_CLASS_NUMBER);
+        kmFahrtEnde.setInputType(InputType.TYPE_CLASS_NUMBER);
+        kmGeschaeftlich.setInputType(InputType.TYPE_CLASS_NUMBER);
+        kmPrivat.setInputType(InputType.TYPE_CLASS_NUMBER);
+        kmWohnArbeit.setInputType(InputType.TYPE_CLASS_NUMBER);
+        kraftstoffLiter.setInputType(InputType.TYPE_CLASS_NUMBER);
+        kraftstoffBetrag.setInputType(InputType.TYPE_CLASS_NUMBER);
+        literPro100km.setInputType(InputType.TYPE_CLASS_NUMBER);
+        sonstigesBetrag.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 

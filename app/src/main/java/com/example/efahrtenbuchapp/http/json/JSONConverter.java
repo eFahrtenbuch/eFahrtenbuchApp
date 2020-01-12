@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Konvertiert Objekte von und zu JSONObjects
+ */
 public class JSONConverter {
 
     private JSONConverter(){}
@@ -34,11 +37,24 @@ public class JSONConverter {
         return mapToObject(clazz, fieldNamesMap);
     }
 
+    /**
+     * Siehe oben
+     * @param clazz
+     * @param json
+     * @param excludedFields Attribute die nicht berücksichtigt werden sollen
+     * @param <T> die Klasse des zu erstellenden Objekts
+     * @return
+     */
     public static <T> T createObjectFromJSON(Class<T> clazz, JSONObject json, String... excludedFields){
         HashMap<String, Object> fieldNamesMap = getFieldNamesAsMap(clazz, json, excludedFields);
         return mapToObject(clazz, fieldNamesMap);
     }
 
+    /**
+     * Erstellt aus einem JSONArray eine Java-List an JSONObjects
+     * @param jsonArray
+     * @return eine Java-List aus JSONObjects
+     */
     public static List<JSONObject> toJSONList(JSONArray jsonArray){
         ArrayList<JSONObject> jsonList = new ArrayList<>();
         for(int i = 0; i < jsonArray.length(); i++){
@@ -63,11 +79,17 @@ public class JSONConverter {
         return toJSONList(jsonArray).stream().map(json -> createObjectFromJSON(clazz, json)).collect(Collectors.toList());
     }
 
+    /**
+     * Erstellt eine Fahrt aus einem JSONObject
+     * @param json
+     * @return die erstellte Fahrt
+     */
     public static Fahrt createFahrtFromJSON(JSONObject json){
         JSONObject startAdresseJSON;
         JSONObject zielAdresseJSON;
         String[] elementsToRemove = {"startAdresse", "zielAdresse", "fahrtEndeDatum", "fahrtBeginnDatum", "fahrtBeginnZeit", "fahrtEndeZeit"};
         try {
+            //Adresse und Zeit müssen separat behandelt werden sonst kommt es zu einem Fehler
             startAdresseJSON = json.getJSONObject("startAdresse");
             zielAdresseJSON = json.getJSONObject("zielAdresse");
             Adresse start = JSONConverter.createObjectFromJSON(Adresse.class, startAdresseJSON);
@@ -96,6 +118,14 @@ public class JSONConverter {
         }
     }
 
+    /**
+     * Erstellt eine Map aus den Attributen
+     * @param clazz
+     * @param json
+     * @param excludedFields
+     * @param <T>
+     * @return
+     */
     private static<T> HashMap<String, Object> getFieldNamesAsMap(Class<T> clazz, JSONObject json, String... excludedFields) {
        List<String> fieldNames =  Arrays.asList(clazz.getDeclaredFields()).stream().map(Field::getName).collect(Collectors.toList());
        if(excludedFields != null){
@@ -113,6 +143,13 @@ public class JSONConverter {
        return hm;
     }
 
+    /**
+     * Mappt die angebeben Attribute auf ein neues Objekt
+     * @param clazz Klasse des zu erstellenden Objekts
+     * @param hm Attribute
+     * @param <T> Klasse des zu erstellenden Objekts
+     * @return
+     */
     private static <T> T mapToObject(Class<T> clazz, HashMap<String, Object> hm){
         T obj = null;
         try {
